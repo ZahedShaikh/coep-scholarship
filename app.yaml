@@ -1,0 +1,7 @@
+runtime: php72
+
+env_variables:
+  APP_KEY: base64:z5GyN233uvuJOrZjEgmORgYG1IRTUBuRSp71rj9Y+vI=
+  APP_STORAGE: /tmp
+  VIEW_COMPILED_PATH: /tmp
+  SESSION_DRIVER: cookie
