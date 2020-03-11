@@ -35,7 +35,7 @@ class semesterController extends Controller {
 
     public function edit(semesterMarks $semesterMarks) {
 
-        $marks = DB::table('semester_Marks')->where('id', Auth::user()->id)->first();
+        $marks = DB::table('semester_marks')->where('id', Auth::user()->id)->first();
         //dd($marks);
         return view('marks.marks')->with('marks', $marks);
     }
@@ -128,6 +128,10 @@ class semesterController extends Controller {
             }
         }
 
+        if($count==0){
+            return redirect(route('home'))->withErrors('No changes made');
+        }
+        
         $CGPA = $sum / $count;
         $task->CGPA = $CGPA;
 
@@ -171,7 +175,7 @@ class semesterController extends Controller {
             $task->fill($input)->save();
             return redirect(route('home'))->with('message', 'Marks updated successfully');
         } else {
-            return redirect(route('home'))->withErrors('Error While Updating your marks');
+            return redirect(route('home'))->withErrors('Error: Marks not saved. Plese fill complete details');
         }
     }
 

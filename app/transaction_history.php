@@ -12,7 +12,7 @@ class transaction_history extends Model {
     public $table = "transaction_history";
     
     protected $fillable = [
-        'id', 'amount', 'fundingAgancy',
+        'id', 'amount', 'fundingAgancy','dateOfTransaction','year',
     ];
 
 }

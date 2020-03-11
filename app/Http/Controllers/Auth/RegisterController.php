@@ -35,7 +35,7 @@ class RegisterController extends Controller {
         ]);
     }
 
-    protected function create(array $data) {
+    public function create(array $data) {
 
         try {
             DB::beginTransaction();
@@ -73,7 +73,8 @@ class RegisterController extends Controller {
             return $user;
         } catch (\Exception $e) {
             DB::rollback();
-            return false;
+            dd($e);
+            return $user;
             //return view('auth.login');
         }
     }

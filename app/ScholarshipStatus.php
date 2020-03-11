@@ -12,6 +12,6 @@ class ScholarshipStatus extends Model
     public $table = "scholarship_status";
     
     protected $fillable = [
-        'id',
+        'id','lastest_approved_date',
     ];
 }

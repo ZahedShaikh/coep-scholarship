@@ -24,7 +24,7 @@ class ProfilePrintController extends Controller {
 
     public function show(semesterMarks $semesterMarks) {
 
-        $marks = DB::table('semester_Marks')->where('id', Auth::user()->id)->first();
+        $marks = DB::table('semester_marks')->where('id', Auth::user()->id)->first();
         
         if (!isset($marks)) {
             return redirect(route('home'))->with('message', 'Please all details and your marks first');
