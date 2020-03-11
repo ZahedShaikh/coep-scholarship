@@ -30,7 +30,7 @@ class CreateSemesterMarksTable extends Migration {
             $table->enum('semester_marks_updated', ['yes', 'no'])->default('no');
 
             // Add validity for 7-8 months
-            $table->date('marks_validity')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->date('marks_validity')->useCurrent();
 
             $table->timestamps();
         });

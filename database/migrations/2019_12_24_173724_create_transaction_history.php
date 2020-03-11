@@ -21,7 +21,7 @@ class CreateTransactionHistory extends Migration {
              */
             $table->string('id');
 
-            $table->date('dateOfTransaction')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->date('dateOfTransaction')->useCurrent();
             $table->year('year')->useCurrent();
             $table->float('amount')->nullable();
 
