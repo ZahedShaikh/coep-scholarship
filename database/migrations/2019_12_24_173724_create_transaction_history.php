@@ -21,8 +21,8 @@ class CreateTransactionHistory extends Migration {
              */
             $table->string('id');
 
-            $table->date('dateOfTransaction')->useCurrent();
-            $table->year('year')->useCurrent();
+            $table->date('dateOfTransaction')->nullable();
+            $table->year('year')->nullable();
             $table->float('amount')->nullable();
 
             $table->enum('amountReceivedForYear', ['1', '2', '3', '4', '5']);

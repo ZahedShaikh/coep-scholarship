@@ -22,7 +22,7 @@ class ScholarshipStatus extends Migration {
             //$table->enum('account_status', ['approved', 'pending'])->default('pending');
             $table->enum('in_process_with', ['issuer', 'accountant', 'done', 'pending'])->default('issuer');
             
-            $table->date('lastest_approved_date')->useCurrent();
+            $table->date('lastest_approved_date')->nullable();
 
             $table->integer('prev_amount_received_in_semester')->default(-1);
             $table->integer('now_receiving_amount_for_semester')->default(0);
