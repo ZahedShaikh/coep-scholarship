@@ -1,7 +1,7 @@
 runtime: php73
 
 handlers:
-  - url: /static
+  - url: /
     static_dir: public
 
 env_variables:
