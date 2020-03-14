@@ -76,13 +76,11 @@
                             <div class="col-md-6">
                                 <select id="college" name="college" class="form-control" required autofocus>
                                     <option disabled="" selected=""></option>
-
-                                    <option value="coep">College of Engineering Pune</option>
-                                    <option value="gpp">Government Polytechnic Pune</option>
-                                    <option value="gcoer">government college of engineering and research avasari</option>
-                                    <option value="gcoek">government college of engineering karad</option>
-                                    <option value="gpa">government polytechnic awasari</option>
-
+                                    <option value="coep">College of Engineering Pune</option>   <!-- B.Tech !-->
+                                    <option value="gcoer">Government College of Engineering and Research Avasari</option><!-- B.Tech !-->
+                                    <option value="gcoek">Government College of Engineering Karad</option><!-- B.Tech !-->
+                                    <option value="gpp">Government Polytechnic Pune</option>    <!-- Diploma !-->
+                                    <option value="gpa">Government Polytechnic Awasari</option> <!-- Diploma !-->
                                 </select>
                             </div>
                         </div>

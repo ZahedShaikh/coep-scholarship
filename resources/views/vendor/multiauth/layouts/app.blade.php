@@ -9,7 +9,7 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }} {{ ucfirst(config('multiauth.prefix')) }}</title>
+        <title>TATA Samarth Scholarship</title>
 
         <!-- Scripts -->
         <script src="{{ asset('/static/js/app.js') }}" defer></script>
@@ -27,7 +27,7 @@
             <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
                 <div class="container">
                     <a class="navbar-brand" href="{{ route('admin.home') }}">
-                        {{ config('app.name', 'Laravel') }} {{ ucfirst(config('multiauth.prefix')) }}
+                        TATA Samarth Scholarship
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
