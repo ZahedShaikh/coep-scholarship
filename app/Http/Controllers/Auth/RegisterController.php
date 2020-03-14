@@ -6,6 +6,7 @@ use App\registeruser;
 use App\semesterMarks;
 use App\BankDetails;
 use App\scholarship_applicants;
+use App\ssc_hsc_diploma;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -39,23 +40,26 @@ class RegisterController extends Controller {
 
         try {
             DB::beginTransaction();
-
+            
+            // Since we are dealing with year only.
+            $year = date('Y', strtotime($data['yearOfAdmission']));
+            
             $user = registeruser::create([
-                        'name' => $data['name'],
-                        'middleName' => $data['middleName'],
-                        'surName' => $data['surName'],
+                        'name' => ucfirst(strtolower($data['name'])),
+                        'middleName' => ucfirst(strtolower($data['middleName'])),
+                        'surName' => ucfirst(strtolower($data['surName'])),
                         'category' => $data['category'],
                         'gender' => $data['gender'],
                         'college' => $data['college'],
                         'collegeEnrollmentNo' => $data['collegeEnrollmentNo'],
-                        'yearOfAdmission' => $data['yearOfAdmission'],
+                        'yearOfAdmission' => $year,
                         'contact' => $data['contact'],
                         'email' => $data['email'],
                         'password' => Hash::make($data['password']),
             ]);
 
             $id = $user->id; // Get current user id
-
+            
             semesterMarks::create([
                 'id' => $id,
             ]);
@@ -67,16 +71,17 @@ class RegisterController extends Controller {
             scholarship_applicants::create([
                 'id' => $id,
             ]);
-
+            
+            ssc_hsc_diploma::create([
+                'id' => $id,
+            ]);            
 
             DB::commit();
             return $user;
         } catch (\Exception $e) {
             DB::rollback();
             dd($e);
-            return $user;
-            //return view('auth.login');
+            return view('auth.login');
         }
     }
-
 }
