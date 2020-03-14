@@ -46,14 +46,14 @@ class semesterController extends Controller {
         $task = semesterMarks::findOrFail($StudentId);
 
         $this->validate($request, [
-            'semester1' => 'nullable|numeric|digits_between:0,2',
-            'semester2' => 'nullable|numeric|digits_between:0,2',
-            'semester3' => 'nullable|numeric|digits_between:0,2',
-            'semester4' => 'nullable|numeric|digits_between:0,2',
-            'semester5' => 'nullable|numeric|digits_between:0,2',
-            'semester6' => 'nullable|numeric|digits_between:0,2',
-            'semester7' => 'nullable|numeric|digits_between:0,2',
-            'semester8' => 'nullable|numeric|digits_between:0,2'
+            'semester1' => 'nullable|numeric|between:1,99.99',
+            'semester2' => 'nullable|numeric|between:1,99.99',
+            'semester3' => 'nullable|numeric|between:1,99.99',
+            'semester4' => 'nullable|numeric|between:1,99.99',
+            'semester5' => 'nullable|numeric|between:1,99.99',
+            'semester6' => 'nullable|numeric|between:1,99.99',
+            'semester7' => 'nullable|numeric|between:1,99.99',
+            'semester8' => 'nullable|numeric|between:1,99.99'
         ]);
 
 
