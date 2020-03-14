@@ -35,7 +35,6 @@ class BankUserController extends Controller {
 
     public function edit(BankDetails $bankDetails) {
         $banks = DB::table('bank_details')->where('id', Auth::user()->id)->first();
-        //dd($marks);
         return view('bank.banks')->with('banks', $banks);
     }
 

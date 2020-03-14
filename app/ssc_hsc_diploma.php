@@ -12,6 +12,6 @@ class ssc_hsc_diploma extends Model
     public $table = "ssc_hsc_diploma";
 
     protected $fillable = [
-        'ssc', 'hsc', 'diploma','sscYear', 'hcsYear', 'diplomaYear',
+        'ssc', 'hcs', 'diploma','sscYear', 'hcsYear', 'diplomaYear',
     ];
 }
