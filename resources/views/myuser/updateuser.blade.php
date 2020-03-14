@@ -101,6 +101,18 @@
                                 </select>
                             </div>
                         </div>
+                        
+                        
+                        <div class="form-group row">
+                            <label for="yearOfAdmission" class="col-md-4 col-form-label text-md-right">{{ __('Year of admission') }}</label>
+                            <div class="col-md-6 input-group date" data-provide="datepicker">
+                                <input id="yearOfAdmission" name="yearOfAdmission" type="text" class="form-control"
+                                       value="{{ $info->yearOfAdmission }}">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                        </div>
 
 
                         <div class="form-group row">

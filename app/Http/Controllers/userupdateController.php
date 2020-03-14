@@ -49,11 +49,15 @@ class userupdateController extends Controller {
                     'gender' => ['required'],
                     'contact' => ['required', 'digits:10', 'min:10'],
                     'college' => ['required'],
+                    'yearOfAdmission' => ['required'],
         ])->validate();
 
         $task = registeruser::findOrFail(Auth::user()->id);
-
         $input = $request->all();
+                
+        $year = date('Y', strtotime($input['yearOfAdmission']));
+        $input['yearOfAdmission'] = $year;
+        
         $task->fill($input)->save();
         return redirect(route('home'))->with('message', 'Your information is updated successfully');
     }
