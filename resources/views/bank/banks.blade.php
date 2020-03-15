@@ -25,7 +25,6 @@
                     @endif
 
 
-
                     <form method="POST" action="{{ route('bankupdate') }}">
                         @csrf
 
@@ -33,7 +32,7 @@
                             <label for="bank_Name" class="col-md-4 col-form-label text-md-right">{{ __('Bank Name') }}</label>
                             <div class="col-md-6">
                                 <input id="bank_Name" type="text" class="form-control @error('middleName') is-invalid @enderror" name="bank_Name" 
-                                       value="{{ $banks->bank_Name }}" autocomplete="bank_Name" autofocus>
+                                       value="{{ $banks->bank_Name }}" autocomplete="bank_Name" autofocus required>
                             </div>
                         </div>
 
@@ -42,7 +41,7 @@
                             <label for="account_No" class="col-md-4 col-form-label text-md-right">{{ __('Account No') }}</label>
                             <div class="col-md-6">
                                 <input id="account_No" type="text" class="form-control @error('middleName') is-invalid @enderror" name="account_No" 
-                                       value="{{ $banks->account_No }}" autocomplete="account_No" autofocus>
+                                       value="{{ $banks->account_No }}" autocomplete="account_No" autofocus required>
                             </div>
                         </div>
 
@@ -50,7 +49,7 @@
                             <label for="IFSC_Code" class="col-md-4 col-form-label text-md-right">{{ __('IFSC Code') }}</label>
                             <div class="col-md-6">
                                 <input id="IFSC_Code" type="text" class="form-control @error('middleName') is-invalid @enderror" name="IFSC_Code" 
-                                       value="{{ $banks->IFSC_Code }}" autocomplete="IFSC_Code" autofocus>
+                                       value="{{ $banks->IFSC_Code }}" autocomplete="IFSC_Code" autofocus required>
                             </div>
                         </div>
 
@@ -58,7 +57,7 @@
                             <label for="branch" class="col-md-4 col-form-label text-md-right">{{ __('Branch') }}</label>
                             <div class="col-md-6">
                                 <input id="branch" type="text" class="form-control @error('middleName') is-invalid @enderror" name="branch" 
-                                       value="{{ $banks->branch }}" autocomplete="branch" autofocus>
+                                       value="{{ $banks->branch }}" autocomplete="branch" autofocus required>
                             </div>
                         </div>
 

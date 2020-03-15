@@ -1,7 +1,10 @@
 <html>
     <head>
 
-        <title>Application form print</title>
+        <title>TATA Samarth Scholarship</title>
+
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+        <script src="{{ asset('/static/js/app.js') }}" defer></script>
 
         <style>
             .invoice-box {
@@ -69,6 +72,18 @@
                 border-top: 2px solid #eee;
                 font-weight: bold;
             }
+            .button {
+                background-color: #008CBA;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
 
             @media only screen and (max-width: 600px) {
                 .invoice-box table tr.top table td {
@@ -120,12 +135,13 @@
                         <table>
                             <tr>
                                 <td class="title">
-                                    <img src="{{URL::asset('images/avatar.png')}}" alt="profile Pic" height="100" width="100">
+                                    <img src="{{URL::asset('/static/images/avatar.png')}}" alt="profile Pic" height="60" width="60">
                                 </td>
 
                                 <td>
-                                    Form No #: {{ $info->id }}<br>
-                                    Updated on: {{ $info->updated_at }}
+                                    Form No #: &nbsp;{{ $info->id }}<br>
+                                    Updated on: &nbsp;{{ $info->updated_at }}<br>
+                                    TATA Samarth Scholarship
                                 </td>
                             </tr>
                         </table>
@@ -140,35 +156,57 @@
             </table>
 
 
-            <table >
-                <col width="20">
-                <col width="40">
-                <col width="15">
-                <col width="30">
+            <table>
+                <col width="35%">
+                <col width="50%">
+                <col width="20%">
+                <col width="20%">
 
                 <tr>
                     <td>Full Name</td>
-                    <td>{{ $info->name }} {{ $info->middleName }} {{ $info->surName }}</td>
+                    <td>&nbsp;{{ $info->name }} &nbsp;{{ $info->middleName }} &nbsp;{{ $info->surName }}</td>
                     <td>Category</td>
-                    <td>{{ $info->category }}</td>
+                    <td>&nbsp;{{ $info->category }}</td>
                 </tr>
                 <tr>
                     <td>Year of admission</td>
-                    <td>{{ $info->yearOfAdmission }}</td>
+                    <td>&nbsp;{{ $info->yearOfAdmission }}</td>
                     <td>Gender</td>
-                    <td>{{ $info->gender }}</td>
+                    <td>&nbsp;{{ $info->gender }}</td>
                 </tr>
                 <tr>
                     <td>Name of College</td>
-                    <td>{{ $info->college }}</td>
+                    <td>&nbsp;{{ $info->college }}</td>
                     <td>Contact</td>
-                    <td>{{ $info->contact }}</td>
+                    <td>&nbsp;{{ $info->contact }}</td>
                 </tr>
                 <tr>
                     <td>Email-ID</td>
-                    <td>{{ $info->email }}</td>
+                    <td>&nbsp;{{ $info->email }}</td>
                     <td></td>
                     <td></td>
+                </tr>
+            </table>
+
+
+
+            <table>
+                <tr class="heading">
+                    <td>
+                        SSC/HSC/Diploma Details
+                    </td>
+                </tr>
+            </table>
+
+            <table>
+                <col width="20">
+                <col width="20">
+                <col width="20">
+
+                <tr>
+                    <td>SSC: &nbsp;{{ $ssc_marks->ssc }}%</td>
+                    <td>HSC: &nbsp;{{ $ssc_marks->hcs }}%</td>
+                    <td>Diploma:  &nbsp;{{ $ssc_marks->diploma }}%</td>
                 </tr>
             </table>
 
@@ -176,51 +214,37 @@
             <table>
                 <tr class="heading">
                     <td>
-                        Semester Details
+                        UG Details
                     </td>
-
                 </tr>
             </table>
 
 
             <table >
-
-
-                <col width="20%">
-                <col width="40%">
-                <col width="15%">
-                <col width="30%">
+                <col width="33%">
+                <col width="33%">
+                <col width="33%">
 
                 <tr>
-                    <td>Semester 1:</td>
-                    <td>{{ $marks->semester1 }}</td>
-                    <td>Semester 5:</td>
-                    <td>{{ $marks->semester5 }}</td>
+                    <td>1st Semester  :&nbsp;{{ $marks->semester1 }}</td>
+                    <td>4th Semester  :&nbsp;{{ $marks->semester4 }}</td>
+                    <td>7th Semester  :&nbsp;{{ $marks->semester7 }}</td>
+                </tr>
+
+                <tr>
+                    <td>2nd Semester  :&nbsp;{{ $marks->semester2 }}</td>
+                    <td>5th Semester  :&nbsp;{{ $marks->semester5 }}</td>
+                    <td>8th Semester  :&nbsp;{{ $marks->semester8 }}</td>
                 </tr>
                 <tr>
-                    <td>Semester 2:</td>
-                    <td>{{ $marks->semester2 }}</td>
-                    <td>Semester 6:</td>
-                    <td>{{ $marks->semester6 }}</td>
+
                 </tr>
                 <tr>
-                    <td>Semester 3:</td>
-                    <td>{{ $marks->semester3 }}</td>
-                    <td>Semester 7:</td>
-                    <td>{{ $marks->semester7 }}</td>
+                    <td>3rd Semester  :&nbsp;{{ $marks->semester3 }}</td>
+                    <td>6th Semester  :&nbsp;{{ $marks->semester6 }}</td>
+                    <td>CGPA          :&nbsp;{{ $marks->CGPA }}</td>
                 </tr>
-                <tr>
-                    <td>Semester 4:</td>
-                    <td>{{ $marks->semester4 }}</td>
-                    <td>Semester 8:</td>
-                    <td>{{ $marks->semester8 }}</td>
-                </tr>
-                <tr>
-                    <td>CGPA:</td>
-                    <td>{{ $marks->CGPA }}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
+
             </table>
 
 
@@ -235,29 +259,55 @@
 
 
             <table>
-                <col width="20%">
-                <col width="40%">
-                <col width="15%">
-                <col width="30%">
+                <col width="50%">
+                <col width="50%">
 
                 <tr>
-                    <td>Bank Name</td>
-                    <td>{{ $banks->bank_Name }}</td>
-                    <td>Account No</td>
-                    <td>{{ $banks->account_No }}</td>
+                    <td>Bank Name&nbsp;:&nbsp;&nbsp;{{ $banks->bank_Name }}</td>
+                    <td>Account No&nbsp;:&nbsp;{{ $banks->account_No }}</td>
                 </tr>
                 <tr>
-                    <td>IFSC Code</td>
-                    <td>{{ $banks->IFSC_Code }}</td>
-                    <td>Branch</td>
-                    <td>{{ $banks->branch }}</td>
+                    <td>IFSC Code&nbsp;:&nbsp;&nbsp;&nbsp;{{ $banks->IFSC_Code }}</td>
+                    <td>Branch&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $banks->branch }}</td>
                 </tr>                
             </table>
 
-            <br>
 
+            <table>
+                <col width="70%">
+                <tr><td></td></tr>
+                <tr><td></td></tr>
+                <tr>
+                    <td></td>
+                    <td>Students Signature&nbsp;</td>
+                </tr>
+
+            </table>
+
+
+
+            <table>
+                <tr class="heading">
+                    <td>
+                        Office Use Only
+                    </td>
+                </tr>
+            </table>
+
+
+            <table>
+                <col width="40%">
+
+                <tr>
+                    <td>Officers Signature and Remark</td>
+                </tr>
+
+            </table>
+
+
+            <br>
             <div style="text-align: center">
-                <input id ="printbtn" type="button" value="Print this page" onclick="window.print();" >
+                <input id ="printbtn" class="button" type="button" value="Print this page" onclick="window.print();" >
             </div>
         </div>
 

@@ -32,7 +32,7 @@
                             <label for="ssc" class="col-md-4 col-form-label text-md-right">{{ __('SSC') }}</label>
                             <div class="col-md-6">
                                 <input id="ssc" type="text" class="form-control @error('ssc') is-invalid @enderror" name="ssc" 
-                                       value="{{ $marks['ssc_hsc']->ssc }}" autocomplete="ssc" autofocus>
+                                       value="{{ $marks['ssc_hsc']->ssc }}" autocomplete="ssc" autofocus required>
                             </div>
                         </div>
 
