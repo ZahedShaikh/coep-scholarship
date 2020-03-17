@@ -26,18 +26,7 @@ class ProfilePrintController extends Controller {
 
         $studentID = Auth::user()->id;
 
-        // SSC Marks Validator
-        $ssc_marks = DB::table('ssc_hsc_diploma')->where('id', $studentID)->first();
-        if (!isset($ssc_marks)) {
-            return redirect(route('home'))->with('message', 'Please all details and your marks first');
-        }
-
         // BE/Diploma Marks Validator
-        $marks = DB::table('semester_marks')->where('id', $studentID)->first();
-        if (!isset($marks)) {
-            return redirect(route('home'))->with('message', 'Please all details and your marks first');
-        }
-
         if ($this->checkSemester($studentID) == false) {
             return redirect(route('home'))->with('message', 'Please all details and your marks first');
         }
@@ -48,8 +37,11 @@ class ProfilePrintController extends Controller {
         }
 
         $info = DB::table('registerusers')->where('id', Auth::user()->id)->first();
-
-
+        
+        
+        $ssc_marks = DB::table('ssc_hsc_diploma')->where('id', $studentID)->first();
+        $marks = DB::table('semester_marks')->where('id', $studentID)->first();
+        
         switch ($info->college) {
             case 'coep':
                 $info->college = 'College of Engineering Pune';
@@ -81,22 +73,14 @@ class ProfilePrintController extends Controller {
         $months = date('m');
         $addMonths = 0;
         switch ($months) {
-            case ($months >= 6 and $months <= 11):
-                // This case for Semeseter 1
-                $addMonths = 2;
-                break;
-            case ($months == 12 or ($months >= 1 and $months <= 5)):
-                // This case for Semeseter 2
+            case ($months >= 7):
                 $addMonths = 1;
                 break;
-            default:
-                // This case holidays
-                $addMonths = 0;
         }
 
-        $years = $currentYear - date('Y', strtotime($data->yearOfAdmission));
-        $forSemester = $addMonths + $years * 2;
-
+        $years = $currentYear - $data->yearOfAdmission;
+        $forSemester = 1 + $addMonths + ($years - 1) * 2;
+        
 
         $semester_marks = DB::table('semester_marks')
                 ->where('id', $studentID)
