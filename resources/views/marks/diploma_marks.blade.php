@@ -39,10 +39,10 @@
 
 
                         <div class="form-group row">
-                            <label for="hcs" class="col-md-4 col-form-label text-md-right">{{ __('HSC') }}</label>
+                            <label for="hsc" class="col-md-4 col-form-label text-md-right">{{ __('HSC') }}</label>
                             <div class="col-md-6">
-                                <input id="hcs" type="text" class="form-control @error('HSC') is-invalid @enderror" name="hcs" 
-                                       value="{{ $marks['ssc_hsc']->hcs }}" autocomplete="hcs" autofocus>
+                                <input id="hsc" type="text" class="form-control @error('HSC') is-invalid @enderror" name="hsc" 
+                                       value="{{ $marks['ssc_hsc']->hsc }}" autocomplete="hsc" autofocus>
                             </div>
                         </div>
 

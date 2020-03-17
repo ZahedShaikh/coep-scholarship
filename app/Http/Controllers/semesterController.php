@@ -83,7 +83,7 @@ class semesterController extends Controller {
 
         $this->validate($request, [
             'ssc' => 'required|numeric|between:35.00,99.99',
-            'hcs' => 'nullable|numeric|between:35.00,99.99',
+            'hsc' => 'nullable|numeric|between:35.00,99.99',
             'diploma' => 'nullable|numeric|between:35.00,99.99',
             'semester1' => 'nullable|numeric|between:1,99.99',
             'semester2' => 'nullable|numeric|between:1,99.99',

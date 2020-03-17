@@ -40,10 +40,10 @@ class RegisterController extends Controller {
 
         try {
             DB::beginTransaction();
-            
+
             // Since we are dealing with year only.
             $year = date('Y', strtotime($data['yearOfAdmission']));
-            
+
             $user = registeruser::create([
                         'name' => ucfirst(strtolower($data['name'])),
                         'middleName' => ucfirst(strtolower($data['middleName'])),
@@ -59,7 +59,7 @@ class RegisterController extends Controller {
             ]);
 
             $id = $user->id; // Get current user id
-            
+
             semesterMarks::create([
                 'id' => $id,
             ]);
@@ -71,10 +71,10 @@ class RegisterController extends Controller {
             scholarship_applicants::create([
                 'id' => $id,
             ]);
-            
+
             ssc_hsc_diploma::create([
                 'id' => $id,
-            ]);            
+            ]);
 
             DB::commit();
             return $user;
@@ -84,4 +84,5 @@ class RegisterController extends Controller {
             return view('auth.login');
         }
     }
+
 }

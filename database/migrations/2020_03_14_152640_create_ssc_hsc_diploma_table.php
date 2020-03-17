@@ -20,8 +20,8 @@ class CreateSscHscDiplomaTable extends Migration
             $table->float('ssc')->nullable();
             $table->year('sscYear')->nullable();
              
-            $table->float('hcs')->nullable();
-            $table->year('hcsYear')->nullable();
+            $table->float('hsc')->nullable();
+            $table->year('hscYear')->nullable();
             
             $table->float('diploma')->nullable();
             $table->year('diplomaYear')->nullable();

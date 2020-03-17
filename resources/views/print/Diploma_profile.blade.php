@@ -206,7 +206,7 @@
 
                 <tr>
                     <td>SSC: &nbsp;{{ $ssc_marks->ssc }}%</td>
-                    <td>HSC: &nbsp;{{ $ssc_marks->hcs }}%</td>
+                    <td>HSC: &nbsp;{{ $ssc_marks->hsc }}%</td>
                 </tr>
             </table>
 
