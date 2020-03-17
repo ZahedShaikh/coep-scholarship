@@ -10,7 +10,7 @@ class semesterMarks extends Model {
     use Notifiable;
 
     protected $fillable = [
-        'semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'semester7', 'semester8','marks_validity',
+        'semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'semester7', 'semester8',
     ];
 
 }

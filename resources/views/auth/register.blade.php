@@ -85,6 +85,24 @@
                             </div>
                         </div>
 
+
+                        <div class="form-group row">
+                            <label for="directSY" class="col-md-4 col-form-label text-md-right">{{ __('Are you Direct Second Year?') }}</label>
+                            <div class="col-md-6 col-form-label ">
+                                <div class="radio">
+                                    <input type="radio" name="directSY" id="directSY_NO" value="no" checked>
+                                    <label class="form-check-label" for="directSY_NO">
+                                        No
+                                    </label>
+                                    <input type="radio" name="directSY" id="directSY_YES" value="yes">
+                                    <label class="form-check-label" for="directSY_YES">
+                                        Yes, I am
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        
                         <div class="form-group row">
                             <label for="collegeEnrollmentNo" class="col-md-4 col-form-label text-md-right">{{ __('College Enrollment No') }}</label>
                             <div class="col-md-6">

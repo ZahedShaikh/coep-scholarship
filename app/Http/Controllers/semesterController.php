@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
-use App\semesterMarks;
+use App\be_semesterMarks;
 use App\ssc_hsc_diploma;
 use Illuminate\Support\Facades\DB;
 
@@ -30,16 +30,16 @@ class semesterController extends Controller {
         //
     }
 
-    public function show(semesterMarks $semesterMarks) {
+    public function show(be_semesterMarks $be_semesterMarks) {
         //
     }
 
-    public function edit(semesterMarks $semesterMarks) {
+    public function edit(be_semesterMarks $be_semesterMarks) {
 
         $studentID = Auth::user()->id;
 
         $Premarks = DB::table('ssc_hsc_diploma')->where('id', $studentID)->first();
-        $UGmarks = DB::table('semester_marks')->where('id', $studentID)->first();
+        $UGmarks = DB::table('be_semester_marks')->where('id', $studentID)->first();
         $data = [
             'ssc_hsc' => $Premarks,
             'ug_marks' => $UGmarks
@@ -59,27 +59,13 @@ class semesterController extends Controller {
         } else {
             return view('marks.diploma_marks')->with('marks', $data);
         }
-        //return View::make('marks')->with($data);
-        //return view('marks.be_marks')->with('marks', $marks);
     }
 
-    public function update(Request $request, semesterMarks $semesterMarks) {
+    public function update(Request $request, be_semesterMarks $be_semesterMarks) {
 
         $studentID = Auth::user()->id;
-        $task = semesterMarks::findOrFail($studentID);
+        $task = be_semesterMarks::findOrFail($studentID);
         $task2 = ssc_hsc_diploma::findOrFail($studentID);
-
-        /*
-          $collegeName = DB::table('registerusers')
-          ->where('id', $studentID)
-          ->select('college')
-          ->first();
-
-          if ($collegeName->college == 'coep' ||
-          $collegeName->college == 'gcoer' ||
-          $collegeName->college == 'gcoek') {
-          }
-         */
 
         $this->validate($request, [
             'ssc' => 'required|numeric|between:35.00,99.99',
@@ -175,7 +161,7 @@ class semesterController extends Controller {
             $task2->fill($input)->save();
             return redirect(route('home'))->with('message', 'Marks updated successfully');
         } else {
-            return redirect(route('home'))->with('message', 'You might have enter invalid marks. Check whether semester for you appeared is correct');
+            return redirect(route('home'))->withErrors('You might have enter invalid marks. Check whether semester for you appeared is correct');
         }
     }
 
@@ -201,7 +187,7 @@ class semesterController extends Controller {
         return $forSemester;
     }
 
-    public function destroy(semesterMarks $semesterMarks) {
+    public function destroy(be_semesterMarks $be_semesterMarks) {
         //
     }
 

@@ -1,18 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateSemesterMarksTable extends Migration {
-
+class CreateBeSemesterMarks extends Migration
+{
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up() {
-        Schema::create('semester_marks', function (Blueprint $table) {
+    public function up()
+    {
+        Schema::create('be_semester_marks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreign('id')->references('id')->on('registerusers')->onDelete('cascade');
 
@@ -29,9 +30,6 @@ class CreateSemesterMarksTable extends Migration {
             $table->string('CGPA')->nullable();
             $table->enum('semester_marks_updated', ['yes', 'no'])->default('no');
 
-            // Add validity for 7-8 months
-            $table->date('marks_validity')->nullable();
-
             $table->timestamps();
         });
     }
@@ -41,8 +39,8 @@ class CreateSemesterMarksTable extends Migration {
      *
      * @return void
      */
-    public function down() {
-        Schema::dropIfExists('semester_marks');
+    public function down()
+    {
+        Schema::dropIfExists('be_semester_marks');
     }
-
 }

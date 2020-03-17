@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\registeruser;
-use App\semesterMarks;
+use App\be_semesterMarks;
+use App\diploma_semesterMarks;
 use Illuminate\Support\Facades\DB;
 
 class ProfilePrintController extends Controller {
@@ -22,7 +23,7 @@ class ProfilePrintController extends Controller {
         return view('home');
     }
 
-    public function show(semesterMarks $semesterMarks) {
+    public function show(be_semester_marks $be_semester_marks) {
 
         $studentID = Auth::user()->id;
 
@@ -40,7 +41,7 @@ class ProfilePrintController extends Controller {
         
         
         $ssc_marks = DB::table('ssc_hsc_diploma')->where('id', $studentID)->first();
-        $marks = DB::table('semester_marks')->where('id', $studentID)->first();
+        $marks = DB::table('be_semester_marks')->where('id', $studentID)->first();
         
         switch ($info->college) {
             case 'coep':
@@ -82,7 +83,7 @@ class ProfilePrintController extends Controller {
         $forSemester = 1 + $addMonths + ($years - 1) * 2;
         
 
-        $semester_marks = DB::table('semester_marks')
+        $semester_marks = DB::table('be_semester_marks')
                 ->where('id', $studentID)
                 ->select('semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'semester1', 'semester7')
                 ->first();

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\registeruser;
-use App\semesterMarks;
+use App\be_semesterMarks;
+use App\diploma_semesterMarks;
 use App\BankDetails;
 use App\scholarship_applicants;
 use App\ssc_hsc_diploma;
@@ -51,6 +52,7 @@ class RegisterController extends Controller {
                         'category' => $data['category'],
                         'gender' => $data['gender'],
                         'college' => $data['college'],
+                        'directSY' => $data['directSY'],
                         'collegeEnrollmentNo' => $data['collegeEnrollmentNo'],
                         'yearOfAdmission' => $year,
                         'contact' => $data['contact'],
@@ -60,10 +62,18 @@ class RegisterController extends Controller {
 
             $id = $user->id; // Get current user id
 
-            semesterMarks::create([
-                'id' => $id,
-            ]);
+            
+            if ($user->college == 'coep' || $user->college == 'gcoer' || $user->college == 'gcoek') {
+                be_semesterMarks::create([
+                    'id' => $id,
+                ]);
+            } else {
+                diploma_semesterMarks::create([
+                    'id' => $id,
+                ]);
+            }
 
+            
             BankDetails::create([
                 'id' => $id,
             ]);

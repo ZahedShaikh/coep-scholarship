@@ -28,6 +28,7 @@ class RegisterUser extends Migration {
             // Somtimes students get Enrollment no late so not forcing.
             $table->string('collegeEnrollmentNo')->nullable()->unique();
             $table->enum('user_profile_updated', ['yes', 'no'])->default('no');
+            $table->enum('directSY', ['yes', 'no'])->default('no');
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

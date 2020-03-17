@@ -26,7 +26,7 @@ class displayAllStudentsDetails extends Controller {
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
-                        ->join('semester_marks', 'semester_marks.id', '=', 'registerusers.id')
+                        ->join('be_semester_marks', 'semester_marks.id', '=', 'registerusers.id')
                         ->where('semester_marks.semester_marks_updated', '=', 'yes')
                         ->where('S1.in_process_with', '=', 'issuer')
                         ->where('S1.prev_amount_received_in_semester', '!=', 'S2.now_receiving_amount_for_semester')

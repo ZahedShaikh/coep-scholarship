@@ -57,7 +57,7 @@ class sanctionAmountController extends Controller {
                 $forSemester = 1 + $addMonths + $years * 2;
 
 
-                $semester_marks = DB::table('semester_marks')
+                $semester_marks = DB::table('be_semester_marks')
                         ->where('semester_marks.id', $row->id)
                         ->join('scholarship_status', 'semester_marks.id', '=', 'scholarship_status.id')
                         ->where('scholarship_status.in_process_with', '=', 'issuer')
@@ -103,11 +103,11 @@ class sanctionAmountController extends Controller {
                 }
 
                 if ($flg) {
-                    DB::table('semester_marks')
+                    DB::table('be_semester_marks')
                             ->where('id', $row->id)
                             ->update(['semester_marks_updated' => 'yes']);
                 } else {
-                    DB::table('semester_marks')
+                    DB::table('be_semester_marks')
                             ->where('id', $row->id)
                             ->update(['semester_marks_updated' => 'no']);
                 }
@@ -134,7 +134,7 @@ class sanctionAmountController extends Controller {
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
-                        ->join('semester_marks', 'semester_marks.id', '=', 'registerusers.id')
+                        ->join('be_semester_marks', 'semester_marks.id', '=', 'registerusers.id')
                         ->where('semester_marks.semester_marks_updated', '=', 'yes')
                         ->where('S1.in_process_with', '=', 'issuer')
                         ->where('S1.prev_amount_received_in_semester', '!=', 'S2.now_receiving_amount_for_semester')
@@ -144,7 +144,7 @@ class sanctionAmountController extends Controller {
                 $data = DB::table('registerusers')
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
-                        ->join('semester_marks', 'semester_marks.id', '=', 'registerusers.id')
+                        ->join('be_semester_marks', 'semester_marks.id', '=', 'registerusers.id')
                         ->where('semester_marks.semester_marks_updated', '=', 'yes')
                         ->join('bank_details', 'bank_details.id', '=', 'registerusers.id')
                         ->where('bank_details.bank_details_updated', '=', 'yes')
