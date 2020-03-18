@@ -62,29 +62,15 @@ class RegisterController extends Controller {
 
             $id = $user->id; // Get current user id
 
-            
             if ($user->college == 'coep' || $user->college == 'gcoer' || $user->college == 'gcoek') {
-                be_semesterMarks::create([
-                    'id' => $id,
-                ]);
+                DB::insert('insert into be_semester_marks (id) values (?)', [$id]);
             } else {
-                diploma_semesterMarks::create([
-                    'id' => $id,
-                ]);
+                DB::insert('insert into diploma_semester_marks (id) values (?)', [$id]);
             }
 
-            
-            BankDetails::create([
-                'id' => $id,
-            ]);
-
-            scholarship_applicants::create([
-                'id' => $id,
-            ]);
-
-            ssc_hsc_diploma::create([
-                'id' => $id,
-            ]);
+            DB::insert('insert into ssc_hsc_diploma (id) values (?)', [$id]);
+            DB::insert('insert into bank_details (id) values (?)', [$id]);
+            DB::insert('insert into scholarship_applicants (id) values (?)', [$id]);
 
             DB::commit();
             return $user;
