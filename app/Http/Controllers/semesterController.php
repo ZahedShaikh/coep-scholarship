@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\be_semesterMarks;
+use App\diploma_semesterMarks;
 use App\ssc_hsc_diploma;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class semesterController extends Controller {
 
@@ -30,41 +32,57 @@ class semesterController extends Controller {
         //
     }
 
-    public function show(be_semesterMarks $be_semesterMarks) {
-        //
-    }
-
-    public function edit(be_semesterMarks $be_semesterMarks) {
+    public function edit() {
 
         $studentID = Auth::user()->id;
-
         $Premarks = DB::table('ssc_hsc_diploma')->where('id', $studentID)->first();
-        $UGmarks = DB::table('be_semester_marks')->where('id', $studentID)->first();
-        $data = [
-            'ssc_hsc' => $Premarks,
-            'ug_marks' => $UGmarks
-        ];
 
         //dd($data);
         $collegeName = DB::table('registerusers')
                 ->where('id', $studentID)
-                ->select('college')
+                ->select('college', 'directSY')
                 ->first();
-        //dd($collegeName->college);
 
         if ($collegeName->college == 'coep' ||
                 $collegeName->college == 'gcoer' ||
                 $collegeName->college == 'gcoek') {
+
+            $UGmarks = DB::table('be_semester_marks')->where('id', $studentID)->first();
+            $data = [
+                'ssc_hsc' => $Premarks,
+                'ug_marks' => $UGmarks
+            ];
+
+            if ($collegeName->directSY == 'yes') {
+                return view('marks.be_DSY_marks')->with('marks', $data);
+            }
             return view('marks.be_marks')->with('marks', $data);
         } else {
+
+            $UGmarks = DB::table('diploma_semester_marks')->where('id', $studentID)->first();
+            $data = [
+                'ssc_hsc' => $Premarks,
+                'ug_marks' => $UGmarks
+            ];
+
+            if ($collegeName->directSY == 'yes') {
+                return view('marks.diploma_DSY_marks')->with('marks', $data);
+            }
+
             return view('marks.diploma_marks')->with('marks', $data);
         }
     }
 
-    public function update(Request $request, be_semesterMarks $be_semesterMarks) {
+    public function update(Request $request) {
 
         $studentID = Auth::user()->id;
-        $task = be_semesterMarks::findOrFail($studentID);
+
+        try {
+            $task = be_semesterMarks::findOrFail($studentID);
+        } catch (ModelNotFoundException $ex) {
+            $task = diploma_semesterMarks::findOrFail($studentID);
+        }
+
         $task2 = ssc_hsc_diploma::findOrFail($studentID);
 
         $this->validate($request, [
@@ -82,7 +100,10 @@ class semesterController extends Controller {
         ]);
 
         $input = $request->all();
-        
+
+        $diploma = $request->input('diploma');
+        $hsc = $request->input('hsc');
+
         $semester1 = $request->input('semester1');
         $semester2 = $request->input('semester2');
         $semester3 = $request->input('semester3');
@@ -96,6 +117,7 @@ class semesterController extends Controller {
         $sum = 0;
         $count = 0;
         $forSem = $this->checkSemester($studentID);
+
 
         if ($semester1) {
             $sum = $sum + $semester1;
@@ -151,13 +173,26 @@ class semesterController extends Controller {
                 $count = -8;
             }
         }
+        
+        $avg = $forSem['forSemester'];
+        if($forSem['directSY'] == 'yes'){
+            $avg -= 2;
+        }
 
-        $CGPA = $sum / $count;
+        $CGPA = $sum / $avg;
         $task->CGPA = $CGPA;
 
-        if ($count == $forSem) {
+        if ($count == $avg) {
             $task->semester_marks_updated = 'yes';
             $task->fill($input)->save();
+
+            // Cheack wether SSC/ Diploma marked filled or not!
+            if (($diploma == null and $hsc == null)) {
+                if ($forSem['college'] != 'gpp' and $forSem['college'] != 'gpa') {
+                    return redirect(route('home'))->withErrors('Please fill your SSC or Diploma Marks');
+                }
+            }
+
             $task2->fill($input)->save();
             return redirect(route('home'))->with('message', 'Marks updated successfully');
         } else {
@@ -169,7 +204,7 @@ class semesterController extends Controller {
 
         $data = DB::table('registerusers')
                 ->where('id', '=', $studentID)
-                ->select('id', 'yearOfAdmission')
+                ->select('id', 'yearOfAdmission', 'college', 'directSY')
                 ->first();
 
         $currentYear = date("Y");
@@ -184,11 +219,13 @@ class semesterController extends Controller {
         $years = $currentYear - $data->yearOfAdmission;
         $forSemester = 1 + $addMonths + ($years - 1) * 2;
 
-        return $forSemester;
-    }
+        $bind = [
+            'forSemester' => $forSemester,
+            'college' => $data->college,
+            'directSY' => $data->directSY
+        ];
 
-    public function destroy(be_semesterMarks $be_semesterMarks) {
-        //
+        return $bind;
     }
 
 }
