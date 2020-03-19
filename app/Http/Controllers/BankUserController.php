@@ -34,8 +34,19 @@ class BankUserController extends Controller {
     }
 
     public function edit(BankDetails $bankDetails) {
+
+        $info = DB::table('registerusers')
+                ->where('id', Auth::user()->id)
+                ->select('freeze')
+                ->first();
+
+        $freeze = '';
+        if ($info->freeze == 'yes') {
+            $freeze = 'disabled';
+        }
+
         $banks = DB::table('bank_details')->where('id', Auth::user()->id)->first();
-        return view('bank.banks')->with('banks', $banks);
+        return view('bank.banks', compact('banks', 'freeze'));
     }
 
     public function update(Request $request, BankDetails $bankDetails) {

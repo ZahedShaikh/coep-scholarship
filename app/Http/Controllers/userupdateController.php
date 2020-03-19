@@ -37,8 +37,12 @@ class userupdateController extends Controller {
     public function edit(registeruser $registeruser) {
 
         $info = DB::table('registerusers')->where('id', Auth::user()->id)->first();
-        //dd($info);
-        return view('myuser.updateuser')->with('info', $info);
+        
+        $freeze = '';
+        if($info->freeze == 'yes'){
+            $freeze = 'disabled';
+        }
+        return view('myuser.updateuser', compact('info', 'freeze'));
     }
 
     public function update(Request $request, registeruser $registeruser) {

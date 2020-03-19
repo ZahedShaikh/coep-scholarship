@@ -100,12 +100,8 @@ class semesterController extends Controller {
         ]);
 
         $input = $request->all();
-
         $diploma = $request->input('diploma');
         $hsc = $request->input('hsc');
-
-        $semester1 = $request->input('semester1');
-        $semester2 = $request->input('semester2');
         $semester3 = $request->input('semester3');
         $semester4 = $request->input('semester4');
         $semester5 = $request->input('semester5');
@@ -117,7 +113,16 @@ class semesterController extends Controller {
         $sum = 0;
         $count = 0;
         $forSem = $this->checkSemester($studentID);
+        $avg = $forSem['forSemester'];
 
+        if ($forSem['directSY'] == 'yes') {
+            $avg += 2;
+            $semester1 = true;
+            $semester2 = true;
+        } else {
+            $semester1 = $request->input('semester1');
+            $semester2 = $request->input('semester2');
+        }
 
         if ($semester1) {
             $sum = $sum + $semester1;
@@ -173,16 +178,11 @@ class semesterController extends Controller {
                 $count = -8;
             }
         }
-        
-        $avg = $forSem['forSemester'];
-        if($forSem['directSY'] == 'yes'){
-            $avg -= 2;
-        }
 
-        $CGPA = $sum / $avg;
+        $CGPA = $sum / $avg - 2;
         $task->CGPA = $CGPA;
 
-        if ($count == $avg) {
+        if ($count == ($avg)) {
             $task->semester_marks_updated = 'yes';
             $task->fill($input)->save();
 

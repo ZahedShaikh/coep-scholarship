@@ -32,7 +32,7 @@
                             <label for="bank_Name" class="col-md-4 col-form-label text-md-right">{{ __('Bank Name') }}</label>
                             <div class="col-md-6">
                                 <input id="bank_Name" type="text" class="form-control @error('middleName') is-invalid @enderror" name="bank_Name" 
-                                       value="{{ $banks->bank_Name }}" autocomplete="bank_Name" autofocus required>
+                                       value="{{ $banks->bank_Name }}" autocomplete="bank_Name" autofocus {{ $freeze }}  required>
                             </div>
                         </div>
 
@@ -41,7 +41,7 @@
                             <label for="account_No" class="col-md-4 col-form-label text-md-right">{{ __('Account No') }}</label>
                             <div class="col-md-6">
                                 <input id="account_No" type="text" class="form-control @error('middleName') is-invalid @enderror" name="account_No" 
-                                       value="{{ $banks->account_No }}" autocomplete="account_No" autofocus required>
+                                       value="{{ $banks->account_No }}" autocomplete="account_No" autofocus {{ $freeze }}  required>
                             </div>
                         </div>
 
@@ -49,7 +49,7 @@
                             <label for="IFSC_Code" class="col-md-4 col-form-label text-md-right">{{ __('IFSC Code') }}</label>
                             <div class="col-md-6">
                                 <input id="IFSC_Code" type="text" class="form-control @error('middleName') is-invalid @enderror" name="IFSC_Code" 
-                                       value="{{ $banks->IFSC_Code }}" autocomplete="IFSC_Code" autofocus required>
+                                       value="{{ $banks->IFSC_Code }}" autocomplete="IFSC_Code" autofocus {{ $freeze }}  required>
                             </div>
                         </div>
 
@@ -57,13 +57,13 @@
                             <label for="branch" class="col-md-4 col-form-label text-md-right">{{ __('Branch') }}</label>
                             <div class="col-md-6">
                                 <input id="branch" type="text" class="form-control @error('middleName') is-invalid @enderror" name="branch" 
-                                       value="{{ $banks->branch }}" autocomplete="branch" autofocus required>
+                                       value="{{ $banks->branch }}" autocomplete="branch" autofocus {{ $freeze }}  required>
                             </div>
                         </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-8">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" {{ $freeze }}>
                                     {{ __('Update') }}
                                 </button>
                                 <a href="javascript:history.back()" class="btn btn-primary">Back</a>

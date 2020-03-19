@@ -125,8 +125,6 @@
 
     </head>
 
-
-
     <body>
 
         <div class="invoice-box">
@@ -142,7 +140,8 @@
 
                                 <td>
                                     Form No #: &nbsp;{{ $info->id }}<br>
-                                    Updated on: &nbsp;{{ $info->updated_at }}
+                                    Updated on: &nbsp;{{ $info->updated_at }}<br>
+                                    TATA Samarth Scholarship
                                 </td>
                             </tr>
                         </table>
@@ -158,7 +157,7 @@
 
 
             <table>
-                <col width="30%">
+                <col width="35%">
                 <col width="50%">
                 <col width="20%">
                 <col width="20%">
@@ -194,7 +193,7 @@
             <table>
                 <tr class="heading">
                     <td>
-                        SSC/HSC Details
+                        SSC/HSC/Diploma Details
                     </td>
                 </tr>
             </table>
@@ -207,6 +206,7 @@
                 <tr>
                     <td>SSC: &nbsp;{{ $ssc_marks->ssc }}%</td>
                     <td>HSC: &nbsp;{{ $ssc_marks->hsc }}%</td>
+                    <td>Diploma:  &nbsp;{{ $ssc_marks->diploma }}%</td>
                 </tr>
             </table>
 
@@ -214,7 +214,7 @@
             <table>
                 <tr class="heading">
                     <td>
-                        Diploma Details
+                        UG Details
                     </td>
                 </tr>
             </table>
@@ -226,25 +226,23 @@
                 <col width="33%">
 
                 <tr>
-                    <td>1st Semester  :&nbsp;{{ $semester_marks->semester1 }}</td>
                     <td>3rd Semester  :&nbsp;{{ $semester_marks->semester3 }}</td>
                     <td>5th Semester  :&nbsp;{{ $semester_marks->semester5 }}</td>
+                    <td>7th Semester  :&nbsp;{{ $semester_marks->semester7 }}</td>
                 </tr>
 
                 <tr>
-                    <td>2nd Semester  :&nbsp;{{ $semester_marks->semester2 }}</td>
                     <td>4th Semester  :&nbsp;{{ $semester_marks->semester4 }}</td>
                     <td>6th Semester  :&nbsp;{{ $semester_marks->semester6 }}</td>
+                    <td>8th Semester  :&nbsp;{{ $semester_marks->semester8 }}</td>
                 </tr>
                 <tr>
 
                 </tr>
                 <tr>
-                    <td>CGPA&nbsp;&nbsp;&nbsp;:&nbsp;{{ round($semester_marks->CGPA,2) }}</td>
+                    <td>CGPA          :&nbsp;{{ round($semester_marks->CGPA,2) }}</td>
                 </tr>
-
             </table>
-
 
 
             <table>
@@ -269,8 +267,6 @@
                     <td>Branch&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $banks->branch }}</td>
                 </tr>                
             </table>
-
-
 
 
             <table>

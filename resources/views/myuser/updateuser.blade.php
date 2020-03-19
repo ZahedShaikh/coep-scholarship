@@ -33,7 +33,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" 
-                                       value="{{ $info->name }}" autocomplete="name" autofocus>
+                                       value="{{ $info->name }}" autocomplete="name" autofocus {{ $freeze }} >
                             </div>
                         </div>
 
@@ -41,7 +41,7 @@
                             <label for="middleName" class="col-md-4 col-form-label text-md-right">{{ __('middleName') }}</label>
                             <div class="col-md-6">
                                 <input id="middleName" type="text" class="form-control @error('middleName') is-invalid @enderror" name="middleName" 
-                                       value="{{ $info->middleName }}" autocomplete="middleName" autofocus>
+                                       value="{{ $info->middleName }}" autocomplete="middleName" autofocus {{ $freeze }} >
                             </div>
                         </div>
 
@@ -49,7 +49,7 @@
                             <label for="surName" class="col-md-4 col-form-label text-md-right">{{ __('surName') }}</label>
                             <div class="col-md-6">
                                 <input id="surName" type="text" class="form-control @error('surName') is-invalid @enderror" name="surName" 
-                                       value="{{ $info->surName }}" autocomplete="surName" autofocus>
+                                       value="{{ $info->surName }}" autocomplete="surName" autofocus {{ $freeze }} >
                             </div>
                         </div>
 
@@ -57,7 +57,7 @@
                             <label for="category" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
 
                             <div class="col-md-6">
-                                <select id="category" name="category" class="form-control">
+                                <select id="category" name="category" class="form-control"  {{ $freeze }}>
                                     <option value="OPEN"  {{ ( $info->category == "OEPN" ) ? 'selected' : '' }} >Open</option>
                                     <option value="OBC"  {{ ( $info->category == "OBC" ) ? 'selected' : '' }} >OBC</option>
                                     <option value="EWS"  {{ ( $info->category == "EWS" ) ? 'selected' : '' }} >EWS</option>
@@ -78,7 +78,7 @@
                         <div class="form-group row">
                             <label for="gender" class="col-md-4 col-form-label text-md-right">{{ __('Gender') }}</label>
                             <div class="col-md-6">
-                                <select id="gender" name="gender" class="form-control" required autofocus>
+                                <select id="gender" name="gender" class="form-control" required autofocus {{ $freeze }} >
                                     <option value="male"  {{ ( $info->gender == "male" ) ? 'selected' : '' }} >Male</option>
                                     <option value="female"  {{ ( $info->gender == "female" ) ? 'selected' : '' }} >Female</option>
                                     <option value="other"  {{ ( $info->gender == "other" ) ? 'selected' : '' }} >Other</option>
@@ -90,7 +90,7 @@
                         <div class="form-group row">
                             <label for="college" class="col-md-4 col-form-label text-md-right">{{ __('College Name') }}</label>
                             <div class="col-md-6">
-                                <select id="college" name="college" class="form-control" required autofocus>
+                                <select id="college" name="college" class="form-control" required autofocus {{ $freeze }} >
 
                                     <option value="coep" {{ ( $info->college == "coep" ) ? 'selected' : '' }} >College of Engineering Pune</option>
                                     <option value="gpp" {{ ( $info->college == "gpp" ) ? 'selected' : '' }} >Government Polytechnic Pune</option>
@@ -107,7 +107,7 @@
                             <label for="yearOfAdmission" class="col-md-4 col-form-label text-md-right">{{ __('Year of admission') }}</label>
                             <div class="col-md-6 input-group date" data-provide="datepicker">
                                 <input id="yearOfAdmission" name="yearOfAdmission" type="text" class="form-control"
-                                       value="{{ $info->yearOfAdmission }}">
+                                       value="{{ $info->yearOfAdmission }}"  {{ $freeze }}>
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>
@@ -119,13 +119,13 @@
                             <label for="contact" class="col-md-4 col-form-label text-md-right">{{ __('contact') }}</label>
                             <div class="col-md-6">
                                 <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror" name="contact" 
-                                       value="{{ $info->contact }}" autocomplete="contact" autofocus>
+                                       value="{{ $info->contact }}" autocomplete="contact" autofocus {{ $freeze }} >
                             </div>
                         </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-8">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" {{ $freeze }} >
                                     {{ __('Update') }}
                                 </button>
                                 <a href="javascript:history.back()" class="btn btn-primary">Back</a>

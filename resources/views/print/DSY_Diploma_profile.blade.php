@@ -17,7 +17,6 @@
                 line-height: 24px;
                 font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
                 color: #555;
-
             }
 
             .invoice-box table {
@@ -210,7 +209,6 @@
                 </tr>
             </table>
 
-
             <table>
                 <tr class="heading">
                     <td>
@@ -220,32 +218,24 @@
             </table>
 
 
-            <table >
+            <table>
                 <col width="33%">
                 <col width="33%">
                 <col width="33%">
 
                 <tr>
-                    <td>1st Semester  :&nbsp;{{ $semester_marks->semester1 }}</td>
                     <td>3rd Semester  :&nbsp;{{ $semester_marks->semester3 }}</td>
                     <td>5th Semester  :&nbsp;{{ $semester_marks->semester5 }}</td>
                 </tr>
-
                 <tr>
-                    <td>2nd Semester  :&nbsp;{{ $semester_marks->semester2 }}</td>
+
+                </tr>
+                <tr>
                     <td>4th Semester  :&nbsp;{{ $semester_marks->semester4 }}</td>
                     <td>6th Semester  :&nbsp;{{ $semester_marks->semester6 }}</td>
-                </tr>
-                <tr>
-
-                </tr>
-                <tr>
                     <td>CGPA&nbsp;&nbsp;&nbsp;:&nbsp;{{ round($semester_marks->CGPA,2) }}</td>
                 </tr>
-
             </table>
-
-
 
             <table>
                 <tr class="heading">
@@ -254,7 +244,6 @@
                     </td>
                 </tr>
             </table>
-
 
             <table>
                 <col width="50%">

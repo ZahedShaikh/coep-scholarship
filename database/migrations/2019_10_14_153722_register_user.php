@@ -29,11 +29,13 @@ class RegisterUser extends Migration {
             $table->string('collegeEnrollmentNo')->nullable()->unique();
             $table->enum('user_profile_updated', ['yes', 'no'])->default('no');
             $table->enum('directSY', ['yes', 'no'])->default('no');
+            
+            $table->enum('freeze', ['yes', 'no'])->default('no');
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-
+            
             $table->rememberToken();
             $table->timestamps();
         });
