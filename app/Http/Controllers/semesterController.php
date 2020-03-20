@@ -35,6 +35,19 @@ class semesterController extends Controller {
     public function edit() {
 
         $studentID = Auth::user()->id;
+
+        $freeze = array('', '', '', '', '', '', '', '',);
+        $freeze_for_semester = DB::table('scholarship_status')
+                ->where('id', $studentID)
+                ->select('now_receiving_amount_for_semester')
+                ->first();
+        
+        if($freeze_for_semester != null) {
+            for ($x = 0; $x < $freeze_for_semester->now_receiving_amount_for_semester; $x++) {
+                $freeze[$x] = 'disabled';
+            }
+        }
+
         $Premarks = DB::table('ssc_hsc_diploma')->where('id', $studentID)->first();
 
         //dd($data);
@@ -48,28 +61,31 @@ class semesterController extends Controller {
                 $collegeName->college == 'gcoek') {
 
             $UGmarks = DB::table('be_semester_marks')->where('id', $studentID)->first();
-            $data = [
+            $marks = [
                 'ssc_hsc' => $Premarks,
                 'ug_marks' => $UGmarks
             ];
 
             if ($collegeName->directSY == 'yes') {
-                return view('marks.be_DSY_marks')->with('marks', $data);
+                //return view('marks.be_DSY_marks')->with('marks', $data);
+                return view('marks.be_DSY_marks', compact('marks', 'freeze'));
             }
-            return view('marks.be_marks')->with('marks', $data);
+            //return view('marks.be_marks')->with('marks', $data);
+            return view('marks.be_marks', compact('marks', 'freeze'));
         } else {
 
             $UGmarks = DB::table('diploma_semester_marks')->where('id', $studentID)->first();
-            $data = [
+            $marks = [
                 'ssc_hsc' => $Premarks,
                 'ug_marks' => $UGmarks
             ];
 
             if ($collegeName->directSY == 'yes') {
-                return view('marks.diploma_DSY_marks')->with('marks', $data);
+                //return view('marks.diploma_DSY_marks')->with('marks', $data);
+                return view('marks.diploma_DSY_marks', compact('marks', 'freeze'));
             }
-
-            return view('marks.diploma_marks')->with('marks', $data);
+            //return view('marks.diploma_marks')->with('marks', $data);
+            return view('marks.diploma_marks', compact('marks', 'freeze'));
         }
     }
 
@@ -188,7 +204,7 @@ class semesterController extends Controller {
             if ($count == ($avg)) {
                 $task->semester_marks_updated = 'yes';
                 $task->fill($input)->save();
-                
+
                 // Cheack wether SSC/ Diploma marked filled or not!
                 if (($diploma == null and $hsc == null)) {
                     if ($forSem['college'] != 'gpp' and $forSem['college'] != 'gpa') {
