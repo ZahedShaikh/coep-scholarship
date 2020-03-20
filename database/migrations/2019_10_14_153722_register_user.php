@@ -20,7 +20,6 @@ class RegisterUser extends Migration {
             $table->string('surName');
             $table->enum('category', ['OPEN', 'OBC', 'EWS', 'SC', 'ST', 'SBC', 'VJ', 'NT-1', 'NT-2', 'NT-3', 'ECBC', 'OTHER']);
             $table->enum('gender', ['male', 'female', 'other']);
-            //$table->date('yearOfAdmission');
             $table->year('yearOfAdmission');
             $table->string('contact');
             $table->string('college');
@@ -31,6 +30,7 @@ class RegisterUser extends Migration {
             $table->enum('directSY', ['yes', 'no'])->default('no');
             
             $table->enum('freeze', ['yes', 'no'])->default('no');
+            $table->integer('version')->default(1);
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

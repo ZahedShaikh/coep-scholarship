@@ -50,7 +50,8 @@ class BankUserController extends Controller {
     }
 
     public function update(Request $request, BankDetails $bankDetails) {
-        $task = BankDetails::findOrFail(Auth::user()->id);
+        $studentID = Auth::user()->id;
+        $task = BankDetails::findOrFail($studentID);
 
         $this->validate($request, [
             'bank_Name' => 'required',
@@ -61,11 +62,23 @@ class BankUserController extends Controller {
 
         $input = $request->all();
         $task->bank_details_updated = 'yes';
-        $task->fill($input)->save();
+
+        try {
+            DB::table('registerusers')
+                    ->where('id', '=', $studentID)
+                    ->increment('version');
+
+            $task->fill($input)->save();
+            
+        } catch (Exception $ex) {
+            DB::rollback();
+            dd($ex);
+            return redirect(route('home'))->withErrors('Error while saving Bank Details: Please contact Admin');
+        }
         return redirect(route('home'))->with('message', 'Bank details updated successfully');
     }
 
-    public function destroy(BankDetails $bankDetails) {
+    public function destroy() {
         //
     }
 

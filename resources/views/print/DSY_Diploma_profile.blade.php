@@ -140,7 +140,7 @@
                                 </td>
 
                                 <td>
-                                    Form No #: &nbsp;{{ $info->id }}<br>
+                                    Form No #: &nbsp;{{ $info->id }}: &nbsp;&nbsp;&nbsp; Version# {{ $info->version }} <br>
                                     Updated on: &nbsp;{{ $info->updated_at }}
                                 </td>
                             </tr>

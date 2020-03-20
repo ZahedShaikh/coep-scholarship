@@ -182,21 +182,31 @@ class semesterController extends Controller {
         $CGPA = $sum / $avg - 2;
         $task->CGPA = $CGPA;
 
-        if ($count == ($avg)) {
-            $task->semester_marks_updated = 'yes';
-            $task->fill($input)->save();
+        try {
 
-            // Cheack wether SSC/ Diploma marked filled or not!
-            if (($diploma == null and $hsc == null)) {
-                if ($forSem['college'] != 'gpp' and $forSem['college'] != 'gpa') {
-                    return redirect(route('home'))->withErrors('Please fill your SSC or Diploma Marks');
+
+            if ($count == ($avg)) {
+                $task->semester_marks_updated = 'yes';
+                $task->fill($input)->save();
+                
+                // Cheack wether SSC/ Diploma marked filled or not!
+                if (($diploma == null and $hsc == null)) {
+                    if ($forSem['college'] != 'gpp' and $forSem['college'] != 'gpa') {
+                        return redirect(route('home'))->withErrors('Please fill your SSC or Diploma Marks');
+                    }
                 }
+                DB::table('registerusers')
+                        ->where('id', '=', $studentID)
+                        ->increment('version');
+                $task2->fill($input)->save();
+                return redirect(route('home'))->with('message', 'Marks updated successfully');
+            } else {
+                return redirect(route('home'))->withErrors('You might have enter invalid marks. Check whether semester for you appeared is correct');
             }
-
-            $task2->fill($input)->save();
-            return redirect(route('home'))->with('message', 'Marks updated successfully');
-        } else {
-            return redirect(route('home'))->withErrors('You might have enter invalid marks. Check whether semester for you appeared is correct');
+        } catch (Exception $ex) {
+            DB::rollback();
+            dd($ex);
+            return redirect(route('home'))->withErrors('Error while saving Semester Details: Please contact Admin');
         }
     }
 
