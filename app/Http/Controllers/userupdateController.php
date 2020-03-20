@@ -48,7 +48,6 @@ class userupdateController extends Controller {
         $str = str_replace(' ', '', $str);
         $date = date($str);
         $info->yearOfAdmission = $date;
-        //dd($info->yearOfAdmission);
 
         return view('myuser.updateuser', compact('info', 'freeze'));
     }
