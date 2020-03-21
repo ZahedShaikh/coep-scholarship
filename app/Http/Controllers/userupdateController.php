@@ -42,9 +42,9 @@ class userupdateController extends Controller {
         if ($info->freeze == 'yes') {
             $freeze = 'disabled';
         }
-        
+
         $s = "-07-01";
-        $str = $info->yearOfAdmission." ".$s;
+        $str = $info->yearOfAdmission . " " . $s;
         $str = str_replace(' ', '', $str);
         $date = date($str);
         $info->yearOfAdmission = $date;
@@ -63,16 +63,42 @@ class userupdateController extends Controller {
             'yearOfAdmission' => ['required'],
         ])->validate();
 
-        $task = registeruser::findOrFail(Auth::user()->id);
-        $input = $request->all();
+        try {
+            $studentID = Auth::user()->id;
+            $task = registeruser::findOrFail($studentID);
+            $input = $request->all();
 
-        $year = date('Y', strtotime($input['yearOfAdmission']));
-        $input['yearOfAdmission'] = $year;
-        //Incrementing Form Version
-        $task->version = $task->version + 1;
+            //dd($task->college);
+            $preCollege = $task->college;
+            $nowCollege = $input['college'];
 
-        $task->fill($input)->save();
-        return redirect(route('home'))->with('message', 'Your information is updated successfully');
+            if ($preCollege != $nowCollege) {
+                // Changed diploma to BE    
+                if (($preCollege == 'gpp' and $nowCollege != 'gpa') or ($preCollege == 'gpa' and $nowCollege != 'gpp' )) {
+                    DB::table('diploma_semester_marks')->where('id', '=', $studentID)->delete();
+                    DB::insert('insert into be_semester_marks (id) values (?)', [$studentID]);
+                }
+                // Changed BE to diploma
+                if (($preCollege == 'coep' or $preCollege == 'gcoer' or $preCollege == 'gcoek')
+                        and ($nowCollege == 'gpp' or $nowCollege = 'gpa')) {
+                    DB::table('be_semester_marks')->where('id', '=', $studentID)->delete();
+                    DB::insert('insert into diploma_semester_marks (id) values (?)', [$studentID]);
+                }
+            }
+            DB::table('scholarship_status')->where('id', '=', $studentID)->delete();
+
+            $year = date('Y', strtotime($input['yearOfAdmission']));
+            $input['yearOfAdmission'] = $year;
+            //Incrementing Form Version
+            $task->version = $task->version + 1;
+
+            $task->fill($input)->save();
+            return redirect(route('home'))->with('message', 'Your information is updated successfully');
+        } catch (Exception $ex) {
+            DB::rollback();
+            dd($ex);
+            return redirect(route('home'))->withErrors('Please Contact Admin');
+        }
     }
 
     public function destroy(registeruser $registeruser) {
