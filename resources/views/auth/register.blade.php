@@ -31,7 +31,7 @@
                         <div class="form-group row">
                             <label for="surName" class="col-md-4 col-form-label text-md-right">{{ __('Surname') }}</label>
                             <div class="col-md-6">
-                                <input id="surName" type="text" class="form-control @error('name') is-invalid @enderror" name="surName" value="{{ old('surname') }}" required autocomplete="name" autofocus>
+                                <input id="surName" type="text" class="form-control @error('surName') is-invalid @enderror" name="surName" value="{{ old('surName') }}" required autocomplete="name" autofocus>
                             </div>
                         </div>
 
@@ -113,7 +113,7 @@
                         <div class="form-group row">
                             <label for="yearOfAdmission" class="col-md-4 col-form-label text-md-right">{{ __('Year of admission') }}</label>
                             <div class="col-md-6 input-group date" data-provide="datepicker">
-                                <input id="yearOfAdmission" name="yearOfAdmission" type="text" class="form-control">
+                                <input id="yearOfAdmission" name="yearOfAdmission" type="text" class="form-control" value="{{ old('yearOfAdmission') }}">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>

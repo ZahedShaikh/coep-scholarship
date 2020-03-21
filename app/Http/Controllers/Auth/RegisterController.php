@@ -3,11 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\registeruser;
-use App\be_semesterMarks;
-use App\diploma_semesterMarks;
-use App\BankDetails;
-use App\scholarship_applicants;
-use App\ssc_hsc_diploma;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;

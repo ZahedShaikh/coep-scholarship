@@ -91,18 +91,16 @@
                             <label for="college" class="col-md-4 col-form-label text-md-right">{{ __('College Name') }}</label>
                             <div class="col-md-6">
                                 <select id="college" name="college" class="form-control" required autofocus {{ $freeze }} >
-
-                                    <option value="coep" {{ ( $info->college == "coep" ) ? 'selected' : '' }} >College of Engineering Pune</option>
-                                    <option value="gpp" {{ ( $info->college == "gpp" ) ? 'selected' : '' }} >Government Polytechnic Pune</option>
-                                    <option value="gcoer" {{ ( $info->college == "gcoer" ) ? 'selected' : '' }} >government college of engineering and research avasari</option>
-                                    <option value="gcoek" {{ ( $info->college == "gcoek" ) ? 'selected' : '' }} >government college of engineering karad</option>
-                                    <option value="gpa" {{ ( $info->college == "gpa" ) ? 'selected' : '' }} >government polytechnic awasari</option>
-
+                                    <option value="coep" {{ ( $info->college == "coep" ) ? 'selected' : '' }} >College of Engineering Pune</option>   <!-- B.Tech !-->
+                                    <option value="gcoer" {{ ( $info->college == "gcoer" ) ? 'selected' : '' }} >Government College of Engineering and Research Avasari</option>   <!-- B.Tech !-->
+                                    <option value="gcoek" {{ ( $info->college == "gcoek" ) ? 'selected' : '' }} >Government College of Engineering Karad</option>   <!-- B.Tech !-->
+                                    <option value="gpp" {{ ( $info->college == "gpp" ) ? 'selected' : '' }} >Government Polytechnic Pune</option>    <!-- Diploma !-->
+                                    <option value="gpa" {{ ( $info->college == "gpa" ) ? 'selected' : '' }} >Government Polytechnic Awasari</option>    <!-- Diploma !-->
                                 </select>
                             </div>
                         </div>
-                        
-                        
+
+
                         <div class="form-group row">
                             <label for="yearOfAdmission" class="col-md-4 col-form-label text-md-right">{{ __('Year of admission') }}</label>
                             <div class="col-md-6 input-group date" data-provide="datepicker">

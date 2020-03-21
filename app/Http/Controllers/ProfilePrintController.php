@@ -68,7 +68,7 @@ class ProfilePrintController extends Controller {
         if ($info->directSY == 'yes') {
             $forSemester += 2;
         }
-
+        
         $flg = false;
         switch ($forSemester) {
             case 8:
