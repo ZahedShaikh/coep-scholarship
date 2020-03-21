@@ -41,8 +41,8 @@ class semesterController extends Controller {
                 ->where('id', $studentID)
                 ->select('now_receiving_amount_for_semester')
                 ->first();
-        
-        if($freeze_for_semester != null) {
+
+        if ($freeze_for_semester != null) {
             for ($x = 0; $x < $freeze_for_semester->now_receiving_amount_for_semester; $x++) {
                 $freeze[$x] = 'disabled';
             }
@@ -132,7 +132,6 @@ class semesterController extends Controller {
         $avg = $forSem['forSemester'];
 
         if ($forSem['directSY'] == 'yes') {
-            $avg += 2;
             $semester1 = true;
             $semester2 = true;
         } else {
@@ -165,7 +164,6 @@ class semesterController extends Controller {
                 $count = -8;
             }
         }
-
         if ($semester5) {
             $sum = $sum + $semester5;
             $count++;
@@ -195,12 +193,15 @@ class semesterController extends Controller {
             }
         }
 
-        $CGPA = $sum / $avg - 2;
+        if ($forSem['directSY'] == 'yes') {
+            $sum -= 2;
+            $count -= 2;
+        }
+
+        $CGPA = $sum / $avg;
         $task->CGPA = $CGPA;
 
         try {
-
-
             if ($count == ($avg)) {
                 $task->semester_marks_updated = 'yes';
                 $task->fill($input)->save();
