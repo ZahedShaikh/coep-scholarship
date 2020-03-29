@@ -65,7 +65,6 @@ Route::get('/chart', 'Charts@index')->name('chart');
 
 
 
-Route::resource('ajax-crud', 'AjaxController');
 //https://www.tutsmake.com/laravel-5-7-create-first-ajax-crud-application/
 Route::get('/live_search', 'LiveSearch@index')->name('live_search');
 Route::get('/live_search/action', 'LiveSearch@action')->name('live_search.action');
