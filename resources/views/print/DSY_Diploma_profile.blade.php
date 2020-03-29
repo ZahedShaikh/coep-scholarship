@@ -4,7 +4,7 @@
         <title>TATA Samarth Scholarship</title>
 
         <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-        <script src="{{ asset('/static/js/app.js') }}" defer></script>
+        <script src="{{ asset('/js/app.js') }}" defer></script>
 
         <style>
             .invoice-box {
@@ -136,7 +136,7 @@
                         <table>
                             <tr>
                                 <td class="title">
-                                    <img src="{{URL::asset('/static/images/avatar.png')}}" alt="profile Pic" height="60" width="60">
+                                    <img src="{{URL::asset('/images/avatar.png')}}" alt="profile Pic" height="60" width="60">
                                 </td>
 
                                 <td>
