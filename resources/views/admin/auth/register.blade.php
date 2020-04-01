@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Register New {{ ucfirst(config('auth.prefix')) }}</div>
+                <div class="card-header">{{ ucfirst(config('Auth.prefix')) }} Login</div>  
                 <div class="card-body">
                     @include('message')
                     <form method="POST" action="{{ url('/admin/register') }}">
