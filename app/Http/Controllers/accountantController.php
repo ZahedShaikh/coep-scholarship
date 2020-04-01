@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class accountantController extends Controller {
 
     public function index() {
-        return view('admin.auth.Amountant');
+        return view('vendor.multiauth.admin.Amountant');
     }
 
     public function show(Request $request) {
@@ -152,7 +152,7 @@ class accountantController extends Controller {
                 $output = true;
             } catch (\Exception $e) {
                 DB::rollback();
-                return redirect(route('admin.auth.getAmountToBeCredit'))->with('message', 'Something went wrong');
+                return redirect(route('vendor.multiauth.admin.getAmountToBeCredit'))->with('message', 'Something went wrong');
             }
 
             echo json_encode($output);

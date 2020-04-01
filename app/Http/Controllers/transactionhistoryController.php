@@ -55,7 +55,7 @@ class transactionhistoryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit(transaction_history $transaction_history) {
-        return view('admin.auth.amountDistribution');
+        return view('vendor.multiauth.admin.amountDistribution');
     }
 
     /**

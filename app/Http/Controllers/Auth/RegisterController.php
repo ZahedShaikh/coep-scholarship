@@ -2,72 +2,78 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\registeruser;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
-class RegisterController extends Controller
-{
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
+class RegisterController extends Controller {
 
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
+    protected function validator(array $data) {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+                    'name' => ['required', 'string', 'max:255'],
+                    'surName' => ['required', 'string', 'max:255'],
+                    'gender' => ['required'],
+                    'yearOfAdmission' => ['required', 'string', 'max:255'],
+                    'contact' => ['required', 'digits:10', 'min:10'],
+                    'college' => ['required'],
+                    'email' => ['required', 'string', 'email', 'max:255', 'unique:registerusers'],
+                    'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+    public function create(array $data) {
+
+        try {
+            DB::beginTransaction();
+
+            // Since we are dealing with year only.
+            $year = date('Y', strtotime($data['yearOfAdmission']));
+
+            $user = registeruser::create([
+                        'name' => ucfirst(strtolower($data['name'])),
+                        'middleName' => ucfirst(strtolower($data['middleName'])),
+                        'surName' => ucfirst(strtolower($data['surName'])),
+                        'category' => $data['category'],
+                        'gender' => $data['gender'],
+                        'college' => $data['college'],
+                        'directSY' => $data['directSY'],
+                        'collegeEnrollmentNo' => $data['collegeEnrollmentNo'],
+                        'yearOfAdmission' => $year,
+                        'contact' => $data['contact'],
+                        'email' => $data['email'],
+                        'password' => Hash::make($data['password']),
+            ]);
+
+            $id = $user->id; // Get current user id
+
+            if ($user->college == 'coep' || $user->college == 'gcoer' || $user->college == 'gcoek') {
+                DB::insert('insert into be_semester_marks (id) values (?)', [$id]);
+            } else {
+                DB::insert('insert into diploma_semester_marks (id) values (?)', [$id]);
+            }
+
+            DB::insert('insert into ssc_hsc_diploma (id) values (?)', [$id]);
+            DB::insert('insert into bank_details (id) values (?)', [$id]);
+            DB::insert('insert into scholarship_applicants (id) values (?)', [$id]);
+
+            DB::commit();
+            return $user;
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            return view('auth.login');
+        }
     }
+
 }
