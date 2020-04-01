@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class newApplicationsController extends Controller {
 
     public function index() {
-        return view('vendor.multiauth.admin.newScholarshipApplications');
+        return view('admin.auth.newScholarshipApplications');
     }
 
     public function create() {
@@ -112,7 +112,7 @@ class newApplicationsController extends Controller {
                 $output = true;
             } catch (\Exception $e) {
                 DB::rollback();
-                return redirect(route('vendor.multiauth.admin.newScholarshipApplications'))->with('message', 'Something went wrong');
+                return redirect(route('admin.auth.newScholarshipApplications'))->with('message', 'Something went wrong');
             }
 
             echo json_encode($output);
@@ -140,7 +140,7 @@ class newApplicationsController extends Controller {
                 $output = true;
             } catch (\Exception $e) {
                 DB::rollback();
-                return redirect(route('vendor.multiauth.admin.newScholarshipApplications'))->with('message', 'Something went wrong');
+                return redirect(route('admin.auth.newScholarshipApplications'))->with('message', 'Something went wrong');
             }
 
             echo json_encode($output);
