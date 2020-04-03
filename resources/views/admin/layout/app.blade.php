@@ -42,12 +42,12 @@
                             <!-- Authentication Links -->
                             @guest('admin')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/admin/login') }}">{{ ucfirst(config('multiauth.prefix')) }} Login</a>
+                                <a class="nav-link" href="{{ url('/admin') }}">{{ ucfirst(config('auth.prefix')) }} Login</a>
                             </li>
                             @else
                             <li class="nav-item dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    {{ auth('admin')->user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">

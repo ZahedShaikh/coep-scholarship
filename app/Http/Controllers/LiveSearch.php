@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class LiveSearch extends Controller {
 
     public function index() {
-        return view('vendor.multiauth.admin.live_search');
+        return view('admin.auth.live_search');
     }
 
     public function action(Request $request) {

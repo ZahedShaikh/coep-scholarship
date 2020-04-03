@@ -53,6 +53,18 @@ return [
         ],
     ],
 
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Prefix
+    |--------------------------------------------------------------------------
+    |
+    | Use prefix to before the routes of multiauth package.
+    | This way you can keep your admin page secure.
+    | Default : admin
+    */
+    'prefix' => 'admin',
+    
     /*
     |--------------------------------------------------------------------------
     | User Providers

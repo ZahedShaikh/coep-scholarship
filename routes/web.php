@@ -68,21 +68,19 @@ Route::get('/chart', 'Charts@index')->name('chart');
 //https://www.tutsmake.com/laravel-5-7-create-first-ajax-crud-application/
 Route::get('/live_search', 'LiveSearch@index')->name('live_search');
 Route::get('/live_search/action', 'LiveSearch@action')->name('live_search.action');
+
+
 //https://www.webslesson.info/2018/04/live-search-in-laravel-using-ajax.html
 Route::group(['prefix' => 'admin'], function () {
-  Route::get('/login', 'Admin\Auth\LoginController@showLoginForm')->name('login');
+  Route::get('/', 'Admin\Auth\LoginController@showLoginForm')->name('admin.login');
   Route::post('/login', 'Admin\Auth\LoginController@login');
-  Route::post('/logout', 'Admin\Auth\LoginController@logout')->name('logout');
+  Route::post('/logout', 'Admin\Auth\LoginController@logout')->name('admin.logout');
 
-  Route::get('/register', 'Admin\Auth\RegisterController@showRegistrationForm')->name('register');
+  Route::get('/register', 'Admin\Auth\RegisterController@showRegistrationForm')->name('admin.register');
   Route::post('/register', 'Admin\Auth\RegisterController@register');
 
-  Route::post('/password/email', 'Admin\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
-  Route::post('/password/reset', 'Admin\Auth\ResetPasswordController@reset')->name('password.email');
-  Route::get('/password/reset', 'Admin\Auth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+  Route::post('/password/email', 'Admin\Auth\ForgotPasswordController@sendResetLinkEmail')->name('admin.password.request');
+  Route::post('/password/reset', 'Admin\Auth\ResetPasswordController@reset')->name('admin.password.email');
+  Route::get('/password/reset', 'Admin\Auth\ForgotPasswordController@showLinkRequestForm')->name('admin.password.reset');
   Route::get('/password/reset/{token}', 'Admin\Auth\ResetPasswordController@showResetForm');
 });
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

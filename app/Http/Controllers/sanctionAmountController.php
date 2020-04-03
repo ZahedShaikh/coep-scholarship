@@ -117,7 +117,7 @@ class sanctionAmountController extends Controller {
                         ->update(['now_receiving_amount_for_semester' => $forSemester]);
             }
         }
-        return view('vendor.multiauth.admin.sendSanctionAmountToAccounts');
+        return view('admin.auth.sendSanctionAmountToAccounts');
     }
 
     public function show(Request $request) {
@@ -237,7 +237,7 @@ class sanctionAmountController extends Controller {
                 $output = true;
             } catch (\Exception $e) {
                 DB::rollback();
-                return redirect(route('vendor.multiauth.admin.getSanctionAmount'))->with('message', 'Something went wrong');
+                return redirect(route('admin.auth.getSanctionAmount'))->with('message', 'Something went wrong');
             }
 
             echo json_encode($output);
