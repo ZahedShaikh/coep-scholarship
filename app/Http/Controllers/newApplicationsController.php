@@ -154,5 +154,4 @@ class newApplicationsController extends Controller {
     public function destroy(ScholarshipStatus $ScholarshipStatus) {
         //
     }
-
 }

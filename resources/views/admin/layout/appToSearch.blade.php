@@ -28,12 +28,11 @@
 
     </head>
 
-    <body>
-        <div id="app">
-            <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+    <div id="app">
+            <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
                 <div class="container">
-                    <a class="navbar-brand" href="{{ route('admin.home') }}">
-                        {{ config('app.name', 'Laravel') }} {{ ucfirst(config('multiauth.prefix')) }}
+                    <a class="navbar-brand" href="{{ url('/admin') }}">
+                        TATA Samarth Scholarship
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -43,7 +42,6 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="navbar-nav mr-auto">
-
                         </ul>
 
                         <!-- Right Side Of Navbar -->
@@ -51,29 +49,27 @@
                             <!-- Authentication Links -->
                             @guest('admin')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('admin.login')}}">{{ ucfirst(config('multiauth.prefix')) }} Login</a>
+                                <a class="nav-link" href="{{ url('/admin') }}">{{ ucfirst(config('auth.prefix')) }} Login</a>
                             </li>
                             @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                   aria-expanded="false" v-pre>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ auth('admin')->user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @admin('super')
-                                    <a class="dropdown-item" href="{{ route('admin.show') }}">{{ ucfirst(config('multiauth.prefix')) }}</a>
-                                    <a class="dropdown-item" href="{{ route('admin.roles') }}">Roles</a>
-                                    @endadmin
-                                    <a class="dropdown-item" href="{{ route('admin.password.change') }}">Change Password</a>
-                                    <a class="dropdown-item" href="/admin/logout" onclick="event.preventDefault();
-    document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{{ url('/admin/logout') }}"
+                                           onclick="event.preventDefault();
+                                                   document.getElementById('logout-form').submit();">
+                                            Logout
+                                        </a>
+
+                                        <form id="logout-form" action="{{ url('/admin/logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                             @endguest
                         </ul>

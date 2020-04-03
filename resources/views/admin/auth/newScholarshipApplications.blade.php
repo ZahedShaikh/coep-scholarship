@@ -1,4 +1,4 @@
-@extends('admin.layout.app')
+@extends('admin.layout.appToSearch')
 @section('content')
 
 <div class="container">
@@ -63,7 +63,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
+            
             $.ajax({
                 url: "{{ route('showApplicants') }}",
                 method: "GET",

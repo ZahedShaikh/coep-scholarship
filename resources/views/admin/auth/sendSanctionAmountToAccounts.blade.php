@@ -1,4 +1,4 @@
-@extends('multiauth::layouts.appToSearch')
+@extends('admin.layout.appToSearch')
 @section('content')
 
 <div class="container">
