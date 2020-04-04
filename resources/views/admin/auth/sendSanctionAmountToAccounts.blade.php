@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header" >{{ ucfirst(config('multiauth.prefix')) }}: You have <span id="total_records"></span> students to sanction scholarship amount</div>
+                <div class="card-header" >{{ ucfirst(config('auth.prefix')) }}: You have <span id="total_records"></span> students to sanction scholarship amount</div>
 
                 <br>
                 <div class="form-group col-md-4">
@@ -32,8 +32,8 @@
 
 
                 <div class="form-group row mb-0">
-                    <div class="col-md-5 offset-md-7">
-                        <a href="{{ route('sanctionAllApplications') }}" class="btn btn-primary success">Sanction Remaining All Applications</a>
+                    <div class="col-md-6 offset-md-8">
+                        <a href="{{ route('sanctionAllApplications') }}" class="btn btn-primary success">Sanction All Applications</a>
                         <a href="javascript:history.back()" class="btn btn-primary">Back</a>
 
                     </div>
@@ -56,6 +56,7 @@
          * Function to retrive/fetch students with sanction amount status
          * 
          */
+        
         fetch_customer_data();
 
         function fetch_customer_data(query = '')

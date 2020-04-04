@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\ScholarshipStatus;
 use App\scholarship_accepted_list;
 use App\scholarship_rejected_list;
-use App\scholarship_applicants;
 use Illuminate\Support\Facades\DB;
 
 class newApplicationsController extends Controller {
