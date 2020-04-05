@@ -20,6 +20,7 @@
                                 <th>Name</th>
                                 <th>College</th>
                                 <th>Contact</th>
+                                <th>For Sem</th>
                                 <th>Amount</th>
                                 <th>Accept</th>
                             </tr>

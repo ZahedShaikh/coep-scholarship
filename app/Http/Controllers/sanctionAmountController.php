@@ -10,14 +10,16 @@ use Illuminate\Support\Facades\DB;
 class sanctionAmountController extends Controller {
 
     public function index() {
+        // Somehow dont know, In this query '=' means '!=' 
+        // and '!=' means '='
+
         $data = DB::table('registerusers')
                 ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                 ->where('scholarship_status.in_process_with', '=', 'issuer')
-                ->where('scholarship_status.prev_amount_received_in_semester', '<>', 'scholarship_status.now_receiving_amount_for_semester')
+                ->where('scholarship_status.prev_amount_received_in_semester', '=', 'scholarship_status.now_receiving_amount_for_semester')
                 ->orderBy('registerusers.id', 'desc')
                 ->select('registerusers.id', 'registerusers.yearOfAdmission', 'college', 'directSY')
                 ->get();
-
 
         $total_row = $data->count();
         if ($total_row > 0) {
@@ -122,7 +124,7 @@ class sanctionAmountController extends Controller {
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
                         ->where('S1.in_process_with', '=', 'issuer')
-                        ->where('S1.prev_amount_received_in_semester', '!=', 'S2.now_receiving_amount_for_semester')
+                        ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
                         ->orderBy('registerusers.id', 'desc')
@@ -132,7 +134,7 @@ class sanctionAmountController extends Controller {
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
                         ->where('S1.in_process_with', '=', 'issuer')
-                        ->where('S1.prev_amount_received_in_semester', '!=', 'S2.now_receiving_amount_for_semester')
+                        ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
                         ->orderBy('registerusers.id', 'desc')
                         ->get();
             }
@@ -144,15 +146,14 @@ class sanctionAmountController extends Controller {
 
                     $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
                     $amount = ($row->now_receiving_amount_for_semester - $row->prev_amount_received_in_semester) * 4000;
-                    if ($amount == 0) {
-                        continue;
-                    }
+
                     $output .= '
                     <tr id=\"' . $row->id . '\">
                     <td align=\'center\'>' . $row->id . '</td>
                     <td>' . $fullName . '</td>
                     <td>' . $row->college . '</td>
                     <td>' . $row->contact . '</td>
+                    <td>' . $row->now_receiving_amount_for_semester . '</td>
                     <td>' . $amount . "</td>
                     <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Sanction Amount</a> </td>
                     </tr>
@@ -161,7 +162,7 @@ class sanctionAmountController extends Controller {
             } else {
                 $output = '
             <tr>
-            <td align="center" colspan="6">No Data Found</td>
+            <td align="center" colspan="7">No Data Found</td>
             </tr>
             ';
             }
@@ -189,10 +190,18 @@ class sanctionAmountController extends Controller {
         if ($request->ajax()) {
             $output = false;
             $studentID = $request->get('query');
+
+            // For Future Use if needed!
+            /*
+             * $for_sem = $request->get('$for_sem');
+             * $amount = $request->get('$amount');
+             */
+
             try {
                 DB::beginTransaction();
                 DB::table('amount_sanctioned_by_issuer')->insert(
-                        ['id' => $studentID, "created_at" => Carbon::now(), "updated_at" => now()]
+                        ['id' => $studentID, "created_at" => Carbon::now(), "updated_at" => now(),
+                            'receiving_amount_for_semester' => 0, 'amount' => 0]
                 );
 
                 $sem = DB::table('scholarship_status')

@@ -4,19 +4,21 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAmountSanctionedByIssuer extends Migration
-{
+class CreateAmountSanctionedByIssuer extends Migration {
+
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('amount_sanctioned_by_issuer', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreign('id')->references('id')->on('registerusers')->onDelete('cascade');
-            
+
+            $table->integer('receiving_amount_for_semester');
+            $table->integer('amount');
+
             $table->timestamps();
         });
     }
@@ -26,8 +28,8 @@ class CreateAmountSanctionedByIssuer extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('amount_sanctioned_by_issuer');
     }
+
 }

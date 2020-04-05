@@ -24,7 +24,7 @@ class ScholarshipStatus extends Migration {
             
             $table->date('lastest_approved_date')->nullable();
 
-            $table->integer('prev_amount_received_in_semester')->default(-1);
+            $table->integer('prev_amount_received_in_semester')->default(0);
             $table->integer('now_receiving_amount_for_semester')->default(0);
 
             $table->timestamps();
