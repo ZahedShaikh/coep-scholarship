@@ -152,9 +152,9 @@ class sanctionAmountController extends Controller {
                     <td align=\'center\'>' . $row->id . '</td>
                     <td>' . $fullName . '</td>
                     <td>' . $row->college . '</td>
-                    <td>' . $row->contact . '</td>
-                    <td>' . $row->now_receiving_amount_for_semester . '</td>
-                    <td>' . $amount . "</td>
+                    <td>' . $row->contact . "</td>
+                    <td contenteditable='true'>" . $row->now_receiving_amount_for_semester . "</td>
+                    <td contenteditable='true'>" . $amount . "</td>
                     <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Sanction Amount</a> </td>
                     </tr>
                     ";
@@ -188,20 +188,17 @@ class sanctionAmountController extends Controller {
     public function send(Request $request) {
 
         if ($request->ajax()) {
-            $output = false;
-            $studentID = $request->get('query');
 
-            // For Future Use if needed!
-            /*
-             * $for_sem = $request->get('$for_sem');
-             * $amount = $request->get('$amount');
-             */
+            $studentID = $request->get('query_id');
+            $receiving_amount_for_semester = $request->get('query_for_Sem');
+            $amount = $request->get('query_amount');
+            $output = false;
 
             try {
                 DB::beginTransaction();
                 DB::table('amount_sanctioned_by_issuer')->insert(
                         ['id' => $studentID, "created_at" => Carbon::now(), "updated_at" => now(),
-                            'receiving_amount_for_semester' => 0, 'amount' => 0]
+                            'receiving_amount_for_semester' => $receiving_amount_for_semester, 'amount' => $amount]
                 );
 
                 $sem = DB::table('scholarship_status')

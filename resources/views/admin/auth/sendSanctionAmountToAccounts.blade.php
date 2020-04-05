@@ -57,7 +57,7 @@
          * Function to retrive/fetch students with sanction amount status
          * 
          */
-        
+
         fetch_customer_data();
 
         function fetch_customer_data(query = '')
@@ -97,7 +97,7 @@
          */
 
 
-        function assignScholarshipFunction(msg)
+        function assignScholarshipFunction(msg, amount, for_Sem)
         {
             $.ajaxSetup({
                 headers: {
@@ -109,7 +109,7 @@
                 url: "{{ route('sendSanctionAmount') }}",
                 method: "GET",
                 contentType: "application/json; charset=utf-8",
-                data: {query: msg},
+                data: {query_id: msg, query_amount: amount, query_for_Sem:for_Sem},
                 dataType: "json",
                 success: function (data)
                 {
@@ -131,7 +131,12 @@
 
         (function ($) {
             $.fn.assign = function (msg) {
-                assignScholarshipFunction(msg);
+                console.log(msg);
+                var currentRow = $(this).closest("tr");
+                var amount = currentRow.find("td:eq(5)").text();
+                var for_Sem = currentRow.find("td:eq(4)").text();
+                //alert(for_Sem);
+                assignScholarshipFunction(msg, amount, for_Sem);
             };
         })(jQuery);
 
