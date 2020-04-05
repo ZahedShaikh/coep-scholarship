@@ -117,64 +117,25 @@ class sanctionAmountController extends Controller {
             $output = '';
             $query = $request->get('query');
 
-
-            /*
-              if ($query != '') {
-
-              $data = DB::table('registerusers')
-              ->where('registerusers.id', 'LIKE', '%' . $query . '%')
-              ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
-              ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
-              ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
-              ->join('be_semester_marks', 'semester_marks.id', '=', 'registerusers.id')
-              ->where('semester_marks.semester_marks_updated', '=', 'yes')
-              ->where('S1.in_process_with', '=', 'issuer')
-              ->where('S1.prev_amount_received_in_semester', '!=', 'S2.now_receiving_amount_for_semester')
-              ->orderBy('registerusers.id', 'desc')
-              ->get();
-              } else {
-              $data = DB::table('registerusers')
-              ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
-              ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
-              ->join('be_semester_marks', 'semester_marks.id', '=', 'registerusers.id')
-              ->where('semester_marks.semester_marks_updated', '=', 'yes')
-              ->join('bank_details', 'bank_details.id', '=', 'registerusers.id')
-              ->where('bank_details.bank_details_updated', '=', 'yes')
-              ->where('S1.in_process_with', '=', 'issuer')
-              ->where('S1.prev_amount_received_in_semester', '!=', 'S2.now_receiving_amount_for_semester')
-              ->orderBy('registerusers.id', 'desc')
-              ->get();
-              }
-             */
-
             if ($query != '') {
                 $data = DB::table('registerusers')
-                        ->where('registerusers.id', 'LIKE', '%' . $query . '%')
-                        ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
-                        ->join('be_semester_marks', 'be_semester_marks.id', '=', 'registerusers.id')
-//                        ->join('diploma_semester_marks', 'diploma_semester_marks.id', '=', 'registerusers.id')
                         ->where('S1.in_process_with', '=', 'issuer')
                         ->where('S1.prev_amount_received_in_semester', '!=', 'S2.now_receiving_amount_for_semester')
+                        ->where('registerusers.id', 'LIKE', '%' . $query . '%')
+                        ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
                         ->orderBy('registerusers.id', 'desc')
                         ->get();
             } else {
                 $data = DB::table('registerusers')
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
-                        ->join('be_semester_marks', 'be_semester_marks.id', '=', 'registerusers.id')
-//                        ->join('diploma_semester_marks', 'diploma_semester_marks.id', '=', 'registerusers.id')
-                        ->join('bank_details', 'bank_details.id', '=', 'registerusers.id')
-                        ->where('bank_details.bank_details_updated', '=', 'yes')
                         ->where('S1.in_process_with', '=', 'issuer')
                         ->where('S1.prev_amount_received_in_semester', '!=', 'S2.now_receiving_amount_for_semester')
                         ->orderBy('registerusers.id', 'desc')
                         ->get();
             }
-
-            error_log(gettype($data));
-            error_log($data);
 
             $total_row = $data->count();
 
@@ -219,12 +180,6 @@ class sanctionAmountController extends Controller {
         
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ScholarshipStatus  $ScholarshipStatus
-     * @return \Illuminate\Http\Response
-     */
     public function edit(ScholarshipStatus $ScholarshipStatus) {
         //
     }
@@ -245,6 +200,7 @@ class sanctionAmountController extends Controller {
                         ->select('now_receiving_amount_for_semester')
                         ->first();
 
+                // Delete Student if its scholarship peroid is over 
                 if (intval($sem->now_receiving_amount_for_semester == 8)) {
                     DB::table('scholarship_status')->where('id', '=', $studentID)->delete();
                     DB::table('scholarship_tenure')->insert(
@@ -260,9 +216,8 @@ class sanctionAmountController extends Controller {
             } catch (\Exception $e) {
                 DB::rollback();
                 dd('Some problem in Sanction amount controller\n', $e);
-                return redirect(route('admin.auth.getSanctionAmount'))->with('message', 'Something went wrong');
+                //return redirect(route('admin.auth.getSanctionAmount'))->with('message', 'Something went wrong');
             }
-
             echo json_encode($output);
         }
     }
