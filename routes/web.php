@@ -84,3 +84,31 @@ Route::group(['prefix' => 'admin'], function () {
   Route::get('/password/reset', 'Admin\Auth\ForgotPasswordController@showLinkRequestForm')->name('admin.password.reset');
   Route::get('/password/reset/{token}', 'Admin\Auth\ResetPasswordController@showResetForm');
 });
+
+Route::group(['prefix' => 'accountant'], function () {
+  Route::get('/login', 'Accountant\Auth\LoginController@showLoginForm')->name('login');
+  Route::post('/login', 'Accountant\Auth\LoginController@login');
+  Route::post('/logout', 'Accountant\Auth\LoginController@logout')->name('logout');
+
+  Route::get('/register', 'Accountant\Auth\RegisterController@showRegistrationForm')->name('register');
+  Route::post('/register', 'Accountant\Auth\RegisterController@register');
+
+  Route::post('/password/email', 'Accountant\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
+  Route::post('/password/reset', 'Accountant\Auth\ResetPasswordController@reset')->name('password.email');
+  Route::get('/password/reset', 'Accountant\Auth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+  Route::get('/password/reset/{token}', 'Accountant\Auth\ResetPasswordController@showResetForm');
+});
+
+Route::group(['prefix' => 'vendor'], function () {
+  Route::get('/login', 'Vendor\Auth\LoginController@showLoginForm')->name('login');
+  Route::post('/login', 'Vendor\Auth\LoginController@login');
+  Route::post('/logout', 'Vendor\Auth\LoginController@logout')->name('logout');
+
+  Route::get('/register', 'Vendor\Auth\RegisterController@showRegistrationForm')->name('register');
+  Route::post('/register', 'Vendor\Auth\RegisterController@register');
+
+  Route::post('/password/email', 'Vendor\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
+  Route::post('/password/reset', 'Vendor\Auth\ResetPasswordController@reset')->name('password.email');
+  Route::get('/password/reset', 'Vendor\Auth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+  Route::get('/password/reset/{token}', 'Vendor\Auth\ResetPasswordController@showResetForm');
+});

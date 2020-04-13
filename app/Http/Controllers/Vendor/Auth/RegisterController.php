@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Auth;
+namespace App\Http\Controllers\Vendor\Auth;
 
-use App\Models\Admin;
+use App\Models\Vendor;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin/home';
+    protected $redirectTo = '/vendor/home';
 
     /**
      * Create a new controller instance.
@@ -50,7 +50,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:admins',
+            'email' => 'required|email|max:255|unique:vendors',
             'password' => 'required|min:6|confirmed',
         ]);
     }
@@ -59,11 +59,11 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return Admin
+     * @return Vendor
      */
     protected function create(array $data)
     {
-        return Admin::create([
+        return Vendor::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
@@ -77,7 +77,7 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        return view('admin.auth.register');
+        return view('vendor.auth.register');
     }
 
     /**
@@ -87,6 +87,6 @@ class RegisterController extends Controller
      */
     protected function guard()
     {
-        return Auth::guard('admin');
+        return Auth::guard('vendor');
     }
 }

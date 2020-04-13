@@ -36,6 +36,16 @@ return [
     */
 
     'guards' => [
+        'vendor' => [
+            'driver' => 'session',
+            'provider' => 'vendors',
+        ],
+
+        'accountant' => [
+            'driver' => 'session',
+            'provider' => 'accountants',
+        ],
+
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
@@ -83,6 +93,16 @@ return [
     */
 
     'providers' => [
+        'vendors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Vendor::class,
+        ],
+
+        'accountants' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Accountant::class,
+        ],
+
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
@@ -115,6 +135,18 @@ return [
     */
 
     'passwords' => [
+        'vendors' => [
+            'provider' => 'vendors',
+            'table' => 'vendor_password_resets',
+            'expire' => 60,
+        ],
+
+        'accountants' => [
+            'provider' => 'accountants',
+            'table' => 'accountant_password_resets',
+            'expire' => 60,
+        ],
+
         'admins' => [
             'provider' => 'admins',
             'table' => 'admin_password_resets',
