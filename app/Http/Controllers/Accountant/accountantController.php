@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Accountant;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class accountantController extends Controller {
 
     public function index() {
-        return view('admin.accountant.amountDistribute');
+        return view('accountant.amountDistribute');
     }
 
     public function show(Request $request) {

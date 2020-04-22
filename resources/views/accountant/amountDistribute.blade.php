@@ -1,4 +1,4 @@
-@extends('admin.layout.appToSearch')
+@extends('accountant.layout.appToSearch')
 @section('content')
 
 <div class="container">

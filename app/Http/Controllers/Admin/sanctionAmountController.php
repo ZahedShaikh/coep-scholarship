@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\ScholarshipStatus;
@@ -127,7 +128,7 @@ class sanctionAmountController extends Controller {
                         ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
-                        ->orderBy('registerusers.id', 'desc')
+                        ->orderBy('registerusers.id', 'ASC')
                         ->get();
             } else {
                 $data = DB::table('registerusers')
@@ -135,7 +136,7 @@ class sanctionAmountController extends Controller {
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
                         ->where('S1.in_process_with', '=', 'issuer')
                         ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
-                        ->orderBy('registerusers.id', 'desc')
+                        ->orderBy('registerusers.id', 'ASC')
                         ->get();
             }
 

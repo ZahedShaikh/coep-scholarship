@@ -27,23 +27,23 @@ Route::get('/profileprint', 'ProfilePrintController@show')->name('profileprint')
  */
 
 //  newApplications
-Route::get('/getNewApplications', 'newApplicationsController@index')->name('getNewApplications');
-Route::get('/showApplicants', 'newApplicationsController@show')->name('showApplicants');
-Route::get('/assignScholarships/', 'newApplicationsController@accept')->name('assignScholarships');
-Route::get('/rejectAllNewApplications', 'newApplicationsController@reject')->name('rejectAllNewApplications');
+Route::get('/getNewApplications', 'Admin\newApplicationsController@index')->name('getNewApplications');
+Route::get('/showApplicants', 'Admin\newApplicationsController@show')->name('showApplicants');
+Route::get('/assignScholarships/', 'Admin\newApplicationsController@accept')->name('assignScholarships');
+Route::get('/rejectAllNewApplications', 'Admin\newApplicationsController@reject')->name('rejectAllNewApplications');
 
 //  Send Sacntion amount to Account department for monry transfer
-Route::get('/getSanctionAmount', 'sanctionAmountController@index')->name('getSanctionAmount');
-Route::get('/showSanctionAmount', 'sanctionAmountController@show')->name('showSanctionAmount');
-Route::get('/sendSanctionAmount', 'sanctionAmountController@send')->name('sendSanctionAmount');
-Route::get('/sanctionAllApplications', 'sanctionAmountController@sanction')->name('sanctionAllApplications');
+Route::get('/getSanctionAmount', 'Admin\sanctionAmountController@index')->name('getSanctionAmount');
+Route::get('/showSanctionAmount', 'Admin\sanctionAmountController@show')->name('showSanctionAmount');
+Route::get('/sendSanctionAmount', 'Admin\sanctionAmountController@send')->name('sendSanctionAmount');
+Route::get('/sanctionAllApplications', 'Admin\sanctionAmountController@sanction')->name('sanctionAllApplications');
 
 
 //  Here Accountant will credit all amount to stduents account
-Route::get('/getAmountToBeCredit', 'accountantController@index')->name('getAmountToBeCredit');
-Route::get('/showAmountToBeCredit', 'accountantController@show')->name('showAmountToBeCredit');
-Route::get('/creditAmountToBank', 'accountantController@send')->name('creditAmountToBank');
-Route::get('/creditEveryoneAmountToBank', 'accountantController@sanction')->name('creditEveryoneAmountToBank');
+Route::get('/getAmountToBeCredit', 'Accountant\accountantController@index')->name('getAmountToBeCredit');
+Route::get('/showAmountToBeCredit', 'Accountant\accountantController@show')->name('showAmountToBeCredit');
+Route::get('/creditAmountToBank', 'Accountant\accountantController@send')->name('creditAmountToBank');
+Route::get('/creditEveryoneAmountToBank', 'Accountant\accountantController@sanction')->name('creditEveryoneAmountToBank');
 
 //  Here Accountant will credit all amount to stduents account
 Route::get('/getAllStudentsDetails', 'displayAllStudentsDetails@index')->name('getAllStudentsDetails');

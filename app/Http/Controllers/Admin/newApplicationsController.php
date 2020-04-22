@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\ScholarshipStatus;
@@ -38,7 +39,7 @@ class newApplicationsController extends Controller {
                         ->where('bank_details.bank_details_updated', '=', 'yes')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
-                        ->orderBy('registerusers.id', 'desc')
+                        ->orderBy('registerusers.id', 'ASC')
                         ->get();
             } else {
                 $data = DB::table('registerusers')
@@ -47,7 +48,7 @@ class newApplicationsController extends Controller {
                         })
                         ->join('bank_details', 'bank_details.id', '=', 'registerusers.id')
                         ->where('bank_details.bank_details_updated', '=', 'yes')
-                        ->orderBy('registerusers.id', 'desc')
+                        ->orderBy('registerusers.id', 'ASC')
                         ->get();
             }
 

@@ -1,4 +1,4 @@
-@extends('accountant.layout.auth')
+@extends('accountant.layout.app')
 
 @section('content')
 <div class="container">
