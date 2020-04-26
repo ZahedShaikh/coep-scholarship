@@ -49,13 +49,10 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary">
                                     Register
                                 </button>
-
-                                <a href="{{ url('/admin/login') }}" class="btn btn-danger btn-sm float-right">
-                                    Back
-                                </a>
+                                <a href="javascript:history.back()" class="btn btn-primary float-right">Back</a>
                             </div>
                         </div>
                     </form>

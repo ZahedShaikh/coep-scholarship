@@ -40,9 +40,15 @@
                         <!-- Right Side Of Navbar -->
                         <ul class="navbar-nav ml-auto">
                             <!-- Authentication Links -->
-                            @guest('admin')
+                            @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/admin') }}">{{ ucfirst(config('auth.prefix')) }} Login</a>
+                                <a class="nav-link" href="{{ url('/admin') }}">Admin Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/accountant/login') }}">Accountant Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/vendor/login') }}">Vendor Login</a>
                             </li>
                             @else
                             <li class="nav-item dropdown">
@@ -50,19 +56,24 @@
                                     {{ auth('admin')->user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ url('/admin/logout') }}"
-                                           onclick="event.preventDefault();
-                                                   document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <!-- 
+                                    <a class="dropdown-item" href="{{ route('admin.password.reset') }}">Change Password</a>
+                                    !-->
+                                    <a class="dropdown-item" href="{{ route('admin.register') }}">Add New Admin</a>
+                                    <a class="dropdown-item" href="{{ route('accountant.register') }}">Add New Accountant</a>
+                                    <a class="dropdown-item" href="{{ route('vendor.register') }}">Add New Vendor</a>
 
-                                        <form id="logout-form" action="{{ url('/admin/logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
+
+                                    <a class="dropdown-item" href="/admin/logout" onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+                                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+
                             </li>
                             @endguest
                         </ul>

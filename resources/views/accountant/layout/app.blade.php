@@ -40,30 +40,33 @@
                         <!-- Right Side Of Navbar -->
                         <ul class="navbar-nav ml-auto">
                             <!-- Authentication Links -->
-                            @guest('accountant')
+                            @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/accountant/login') }}">{{ ucfirst(config('auth.prefix')) }} Login</a>
+                                <a class="nav-link" href="{{ url('/admin') }}">Admin Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/accountant/login') }}">Accountant Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/vendor/login') }}">Vendor Login</a>
                             </li>
                             @else
+
                             <li class="nav-item dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ auth('accountant')->user()->name }} <span class="caret"></span>
                                 </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ url('/accountant/logout') }}"
-                                           onclick="event.preventDefault();
-                                                   document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ url('/accountant/logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/accountant/logout" onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+                                    <form id="logout-form" action="{{ route('accountant.logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
                             </li>
+
                             @endguest
                         </ul>
                     </div>
