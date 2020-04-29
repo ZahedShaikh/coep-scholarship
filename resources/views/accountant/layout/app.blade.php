@@ -40,7 +40,7 @@
                         <!-- Right Side Of Navbar -->
                         <ul class="navbar-nav ml-auto">
                             <!-- Authentication Links -->
-                            @guest
+                            @guest('accountant')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('/admin') }}">Admin Login</a>
                             </li>
