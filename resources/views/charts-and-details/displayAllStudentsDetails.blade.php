@@ -1,6 +1,13 @@
 @extends('admin.layout.appToSearch')
 @section('content')
 
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
@@ -14,13 +21,24 @@
                 </div>
                 <div class="form-group col-md-3 row">
                     <select id="from" name="category" class="form-control">
-
                     </select>
 
                     <select id="to" name="category" class="form-control">
-
                     </select>
                 </div>
+
+                <div class="form-group col-md-3 row">
+                    <label for="category" text-md-right">{{ __('Select College') }}</label>
+                    
+                    <select class="selectpicker" id="my-select" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
+<!--                    <select class="selectpicker" multiple data-live-search="true" id="my-select">-->
+                        <option>Mustard</option>
+                        <option>Ketchup</option>
+                        <option>Relish</option>
+                    </select>
+                </div>
+
+                <br><br><br><br><br><br>
 
 
                 <div class="table-responsive" id='tableID'>
@@ -154,6 +172,36 @@
 
     });
 
+</script>
+
+
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tableID");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+
+<script>
+    $('.my-select').selectpicker();
 </script>
 
 @endsection
