@@ -26,15 +26,36 @@
 
                 <div class="form-group col-md-3 row">
                     <label for="category" text-md-right">{{ __('Select College') }}</label>
+                    <select class="selectpicker" id="select-college" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
+                        <option value="coep" selected="">College of Engineering Pune</option>   <!-- B.Tech !-->
+                        <option value="gcoer" selected="">Government College of Engineering and Research Avasari</option><!-- B.Tech !-->
+                        <option value="gcoek" selected="">Government College of Engineering Karad</option><!-- B.Tech !-->
+                        <option value="gpp" selected="">Government Polytechnic Pune</option>    <!-- Diploma !-->
+                        <option value="gpa" selected="">Government Polytechnic Awasari</option> <!-- Diploma !-->
 
-                    <select class="selectpicker" id="my-select" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
-<!--                    <select class="selectpicker" multiple data-live-search="true" id="my-select">-->
-                        <option value="coep">coep</option>
-                        <option value="gpp">gpp</option>
+
                     </select>
                 </div>
 
-                <br><br><br><br><br><br>
+                <div class="form-group col-md-3 row">
+                    <label for="category" text-md-right">{{ __('Select Category') }}</label>
+                    <select class="selectpicker" id="select-category" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
+                        <option value="OPEN" selected="">Open</option>
+                        <option value="OBC" selected="">OBC</option>
+                        <option value="EWS" selected="">EWS</option>
+                        <option value="SC" selected="">SC</option>
+                        <option value="ST" selected="">ST</option>
+                        <option value="SBC" selected="">SBC</option>
+                        <option value="VJ" selected="">VJ</option>
+                        <option value="NT-1" selected="">NT-1</option>
+                        <option value="NT-2" selected="">NT-2</option>
+                        <option value="NT-3" selected="">NT-3</option>
+                        <option value="ECBC" selected="">ECBC</option>
+                        <option value="OTHER" selected="">Other</option>
+                    </select>
+                </div>
+
+                <br><br><br>
 
 
                 <div class="table-responsive" id='tableID'>
@@ -77,9 +98,10 @@
     $(document).ready(function () {
 
         //  Dynamic selection of college
-        $("#my-select").change(function () {
-            var selectedValue = $(this).val();
-            myFunction(selectedValue);
+        $("#select-college, #select-category").change(function () {
+            var selectedCollege = $("#select-college").val();
+            var selectedCategory = $("#select-category").val();
+            functionCollege(selectedCollege, selectedCategory);
         });
 
         var currentYear = (new Date).getFullYear();
@@ -113,6 +135,12 @@
                 {
                     $('tbody').html(data.table_data);
                     $('#total_records').text(data.total_data);
+
+                    // check for other filter values as well
+                    var selectedCollege = $("#select-college").val();
+                    var selectedCategory = $("#select-category").val();
+                    functionCollege(selectedCollege, selectedCategory);
+
                 },
                 error: function (data) {
                     console.log(data.status + " " + data.statusText);
@@ -131,41 +159,6 @@
             }
         });
 
-
-
-
-        function assignScholarshipFunction(msg)
-        {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: "{{ route('assignScholarships') }}",
-                method: "GET",
-                contentType: "application/json; charset=utf-8",
-                data: {query: msg},
-                dataType: "json",
-                success: function (data)
-                {
-                    if (data) {
-                        var str1 = 'table#tableID tr#';
-                        var str = str1.concat(msg);
-                        $(str).remove();
-                        location.reload(true);
-                    } else {
-                        console.log('Not saved');
-                    }
-
-                },
-                error: function (data) {
-                    console.log(data.status + " " + data.statusText);
-                }
-            });
-        }
-
         (function ($) {
             $.fn.assign = function (msg) {
                 assignScholarshipFunction(msg);
@@ -174,30 +167,55 @@
 
     });
 
-    function myFunction(selectedValue) {
-        var filter, table, tr, td, i, txtValue, j;
+    function functionCollege(selectedCollege, selectedCategory) {
+
+        var filter, table, tr, td, i, txtValue, j, k, tdCategory, txtValueCategory;
         table = document.getElementById("tableID");
         tr = table.getElementsByTagName("tr");
 
-        var flg = true;
+        var flg = false;
+        var flg2 = true;
         for (i = 1; i < tr.length; i++) {
-            flg = true;
+            flg = false;
+            flg2 = true;
+
             td = tr[i].getElementsByTagName("td")[2];
+
             if (td) {
                 txtValue = td.textContent || td.innerText;
-                for (j = 0; j < selectedValue.length; j++) {
-                    filter = selectedValue[j].toUpperCase();
+                for (j = 0; j < selectedCollege.length; j++) {
+                    filter = selectedCollege[j].toUpperCase();
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                        flg = false;
+//                        tr[i].style.display = "";
+                        flg = true;
                         break;
                     }
                 }
+            }
 
-                if (flg) {
-                    tr[i].style.display = "none";
+            tdCategory = tr[i].getElementsByTagName("td")[4];
+            if (flg) {
+                if (tdCategory) {
+                    txtValueCategory = tdCategory.textContent || tdCategory.innerText;
+                    for (k = 0; k < selectedCategory.length; k++) {
+                        filter = selectedCategory[k].toUpperCase();
+                        if (txtValueCategory.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                            flg2 = false;
+                            break;
+                        }
+                    }
                 }
             }
+
+
+            if (flg2) {
+                tr[i].style.display = "none";
+            }
+
+
+
+
         }
     }
 
@@ -205,7 +223,7 @@
 
 
 <script>
-    $('.my-select').selectpicker();
+    $('.select-college').selectpicker();
 </script>
 
 @endsection
