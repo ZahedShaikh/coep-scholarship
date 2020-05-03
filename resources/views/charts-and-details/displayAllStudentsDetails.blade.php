@@ -152,6 +152,7 @@
             //console.log(from + " " + to);
             if (from > to) {
                 alert('Enter correct year');
+                $('#to').val(from);
             } else {
                 fetch_customer_data(from, to);
             }
