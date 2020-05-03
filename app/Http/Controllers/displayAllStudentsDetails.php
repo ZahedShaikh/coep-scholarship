@@ -19,6 +19,7 @@ class displayAllStudentsDetails extends Controller {
             $to = $request->get('to');
 
             $data1 = DB::table('registerusers')
+                    ->join('scholarship_accepted_list', 'scholarship_accepted_list.id', '=', 'registerusers.id')
                     ->Where('yearOfAdmission', '>=', date('' . $from . ''))
                     ->Where('yearOfAdmission', '<=', date('' . $to . ''))
                     ->orderBy('registerusers.id', 'ASC')
