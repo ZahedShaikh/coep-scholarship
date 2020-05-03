@@ -9,54 +9,52 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header" >{{ ucfirst(config('auth.prefix')) }}: You have <span id="total_records"></span> New Applications</div>
+                <div class="card-header" >{{ ucfirst(config('auth.prefix')) }}</div>
                 <br>
 
-                <div class="form-group col-md-3 row">
-                    <label for="category" text-md-right">{{ __('From') }}</label>
-                    <label for="category" text-md-right">{{ __('To') }}</label>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="from">From</label>
+                        <select id="from" name="category" class="form-control">
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="to">To</label>
+                        <select id="to" name="category" class="form-control">
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="select-college">Select College</label>
+                        <select class="selectpicker" id="select-college" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
+                            <option value="coep" selected="">College of Engineering Pune</option>   <!-- B.Tech !-->
+                            <option value="gcoer" selected="">Government College of Engineering and Research Avasari</option><!-- B.Tech !-->
+                            <option value="gcoek" selected="">Government College of Engineering Karad</option><!-- B.Tech !-->
+                            <option value="gpp" selected="">Government Polytechnic Pune</option>    <!-- Diploma !-->
+                            <option value="gpa" selected="">Government Polytechnic Awasari</option> <!-- Diploma !-->
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="select-category">Select Category</label>
+                        <select class="selectpicker" id="select-category" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
+                            <option value="OPEN" selected="">Open</option>
+                            <option value="OBC" selected="">OBC</option>
+                            <option value="EWS" selected="">EWS</option>
+                            <option value="SC" selected="">SC</option>
+                            <option value="ST" selected="">ST</option>
+                            <option value="SBC" selected="">SBC</option>
+                            <option value="VJ" selected="">VJ</option>
+                            <option value="NT-1" selected="">NT-1</option>
+                            <option value="NT-2" selected="">NT-2</option>
+                            <option value="NT-3" selected="">NT-3</option>
+                            <option value="ECBC" selected="">ECBC</option>
+                            <option value="OTHER" selected="">Other</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group col-md-3 row">
-                    <select id="from" name="category" class="form-control">
-                    </select>
 
-                    <select id="to" name="category" class="form-control">
-                    </select>
-                </div>
-
-                <div class="form-group col-md-3 row">
-                    <label for="category" text-md-right">{{ __('Select College') }}</label>
-                    <select class="selectpicker" id="select-college" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
-                        <option value="coep" selected="">College of Engineering Pune</option>   <!-- B.Tech !-->
-                        <option value="gcoer" selected="">Government College of Engineering and Research Avasari</option><!-- B.Tech !-->
-                        <option value="gcoek" selected="">Government College of Engineering Karad</option><!-- B.Tech !-->
-                        <option value="gpp" selected="">Government Polytechnic Pune</option>    <!-- Diploma !-->
-                        <option value="gpa" selected="">Government Polytechnic Awasari</option> <!-- Diploma !-->
-
-
-                    </select>
-                </div>
-
-                <div class="form-group col-md-3 row">
-                    <label for="category" text-md-right">{{ __('Select Category') }}</label>
-                    <select class="selectpicker" id="select-category" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
-                        <option value="OPEN" selected="">Open</option>
-                        <option value="OBC" selected="">OBC</option>
-                        <option value="EWS" selected="">EWS</option>
-                        <option value="SC" selected="">SC</option>
-                        <option value="ST" selected="">ST</option>
-                        <option value="SBC" selected="">SBC</option>
-                        <option value="VJ" selected="">VJ</option>
-                        <option value="NT-1" selected="">NT-1</option>
-                        <option value="NT-2" selected="">NT-2</option>
-                        <option value="NT-3" selected="">NT-3</option>
-                        <option value="ECBC" selected="">ECBC</option>
-                        <option value="OTHER" selected="">Other</option>
-                    </select>
-                </div>
-
-                <br><br><br>
-
+                <br>
 
                 <div class="table-responsive" id='tableID'>
                     <table class="table table-striped table-bordered">
@@ -106,15 +104,15 @@
 
         var currentYear = (new Date).getFullYear();
         var option = '';
-        for (var i = 2015; i < currentYear; i++) {
+        for (var i = 2015; i <= currentYear; i++) {
             option += '<option value="' + i + '">' + i + '</option>';
         }
-        option += '<option value="' + currentYear + '" selected="">' + currentYear + '</option>';
         $('#from').append(option);
         $('#to').append(option);
-
-        // Call for defualt current year
-        fetch_customer_data(currentYear, currentYear);
+        $("#from").val(currentYear - 1);
+        $("#to").val(currentYear);
+        // Call for defualt current and erlier year
+        fetch_customer_data(currentYear - 1, currentYear);
 
         // Call for givan year
         function fetch_customer_data(from, to)
@@ -186,7 +184,6 @@
                 for (j = 0; j < selectedCollege.length; j++) {
                     filter = selectedCollege[j].toUpperCase();
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-//                        tr[i].style.display = "";
                         flg = true;
                         break;
                     }
@@ -207,18 +204,11 @@
                     }
                 }
             }
-
-
             if (flg2) {
                 tr[i].style.display = "none";
             }
-
-
-
-
         }
     }
-
 </script>
 
 
