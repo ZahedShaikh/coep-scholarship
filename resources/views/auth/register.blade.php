@@ -101,31 +101,12 @@
                             </div>
                         </div>
 
-
                         <div class="form-group row">
                             <label for="collegeEnrollmentNo" class="col-md-4 col-form-label text-md-right">{{ __('College Enrollment No') }}</label>
                             <div class="col-md-6">
                                 <input id="collegeEnrollmentNo" type="text" class="form-control @error('collegeEnrollmentNo') is-invalid @enderror" name="collegeEnrollmentNo" value="{{ old('collegeEnrollmentNo') }}" required autocomplete="collegeEnrollmentNo" autofocus>
                             </div>
                         </div>
-
-                        <!--                        <div class="form-group row">
-                                                    <label for="yearOfAdmission" class="col-md-4 col-form-label text-md-right">{{ __('Year of admission') }}</label>
-                                                    <div class="col-md-6">
-                                                        <select id="yearOfAdmission" name="yearOfAdmission" class="form-control">
-                                                        </select>
-                        
-                                                        
-                                                                                        <div class="col-md-6 input-group date" data-provide="datepicker">
-                                                                                            <input id="yearOfAdmissionlable" name="yearOfAdmissionlable" type="text" class="form-control" value="{{ old('yearOfAdmission') }}">                                <div class="input-group-addon">
-                                                        
-                                                                                                <span class="glyphicon glyphicon-th"></span>
-                                                                                            </div>
-                        
-                        
-                                                    </div>
-                                                </div>-->
-
 
                         <div class="form-group row">
                             <label for="yearOfAdmission" class="col-md-4 col-form-label text-md-right">{{ __('Year of admission') }}</label>
@@ -134,7 +115,6 @@
                                 </select>
                             </div>
                         </div>
-
 
                         <div class="form-group row">
                             <label for="contact" class="col-md-4 col-form-label text-md-right">{{ __('Contact') }}</label>
