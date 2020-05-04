@@ -49,27 +49,10 @@ Route::get('/creditEveryoneAmountToBank', 'Accountant\accountantController@sanct
 Route::get('/getAllStudentsDetails', 'displayAllStudentsDetails@index')->name('getAllStudentsDetails');
 Route::get('/showAllStudentsDetails', 'displayAllStudentsDetails@show')->name('showAllStudentsDetails');
 
-
-/*
- *  Temp URL to be remove later
- */
+Route::get('/charts', 'Charts@index')->name('charts');
 
 
-Route::get('/chart', 'Charts@index')->name('chart');
-
-//Route::get('chart', function(){
-//    $chart = new LarapexChart();
-//    $chart->setTitle('Users')->setXAxis(['Active', 'Guests'])->setDataset([100, 200]);
-//});
-
-
-
-
-//https://www.tutsmake.com/laravel-5-7-create-first-ajax-crud-application/
-Route::get('/live_search', 'LiveSearch@index')->name('live_search');
-Route::get('/live_search/action', 'LiveSearch@action')->name('live_search.action');
-
-
+// MultiAuth Routes
 //https://www.webslesson.info/2018/04/live-search-in-laravel-using-ajax.html
 Route::group(['prefix' => 'admin'], function () {
   Route::get('/', 'Admin\Auth\LoginController@showLoginForm')->name('admin.login');
