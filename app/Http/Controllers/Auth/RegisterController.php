@@ -23,8 +23,6 @@ class RegisterController extends Controller {
         return Validator::make($data, [
                     'name' => ['required', 'string', 'max:255'],
                     'surName' => ['required', 'string', 'max:255'],
-                    'gender' => ['required'],
-                    'yearOfAdmission' => ['required', 'string', 'max:255'],
                     'contact' => ['required', 'digits:10', 'min:10'],
                     'college' => ['required'],
                     'email' => ['required', 'string', 'email', 'max:255', 'unique:registerusers'],
@@ -37,9 +35,6 @@ class RegisterController extends Controller {
         try {
             DB::beginTransaction();
 
-            // Since we are dealing with year only.
-            $year = date('Y', strtotime($data['yearOfAdmission']));
-
             $user = registeruser::create([
                         'name' => ucfirst(strtolower($data['name'])),
                         'middleName' => ucfirst(strtolower($data['middleName'])),
@@ -49,7 +44,7 @@ class RegisterController extends Controller {
                         'college' => $data['college'],
                         'directSY' => $data['directSY'],
                         'collegeEnrollmentNo' => $data['collegeEnrollmentNo'],
-                        'yearOfAdmission' => $year,
+                        'yearOfAdmission' => $data['yearOfAdmission'],
                         'contact' => $data['contact'],
                         'email' => $data['email'],
                         'password' => Hash::make($data['password']),
