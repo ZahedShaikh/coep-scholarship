@@ -144,7 +144,6 @@
         option += '<option value="' + i + '">' + i + '</option>';
     }
     $('#yearOfAdmission').append(option);
-    console.log();
     $("#yearOfAdmission").val({{$info->yearOfAdmission}});
 </script>
 

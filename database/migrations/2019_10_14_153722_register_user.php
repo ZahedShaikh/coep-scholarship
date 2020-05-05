@@ -30,7 +30,7 @@ class RegisterUser extends Migration {
             $table->enum('directSY', ['yes', 'no'])->default('no');
             
             $table->enum('freeze', ['yes', 'no'])->default('no');
-            $table->integer('version')->default(1);
+            $table->integer('version')->default(-1);
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

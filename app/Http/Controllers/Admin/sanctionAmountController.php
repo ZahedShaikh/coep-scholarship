@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ScholarshipStatus;
 use Illuminate\Support\Carbon;
@@ -66,39 +66,48 @@ class sanctionAmountController extends Controller {
                 }
 
                 $flg = false;
+
                 switch ($forSemester) {
                     case 8:
                         if (($semester_marks->semester8) != null) {
                             $flg = true;
                         }
+                        break;
                     case 7:
                         if (($semester_marks->semester7) != null) {
                             $flg = true;
                         }
+                        break;
                     case 6:
                         if (($semester_marks->semester6) != null) {
                             $flg = true;
                         }
+                        break;
                     case 5:
                         if (($semester_marks->semester5) != null) {
                             $flg = true;
                         }
+                        break;
                     case 4:
                         if (($semester_marks->semester4) != null) {
                             $flg = true;
                         }
+                        break;
                     case 3:
                         if (($semester_marks->semester3) != null) {
                             $flg = true;
                         }
+                        break;
                     case 2:
                         if (($semester_marks->semester2) != null) {
                             $flg = true;
                         }
+                        break;
                     case 1:
                         if (($semester_marks->semester1) != null) {
                             $flg = true;
                         }
+                        break;
                     default:
                         break;
                 }
@@ -107,6 +116,16 @@ class sanctionAmountController extends Controller {
                     DB::table('scholarship_status')
                             ->where('id', $info->id)
                             ->update(['now_receiving_amount_for_semester' => $forSemester]);
+                } else {
+                    if ($BE) {
+                        DB::table('be_semester_marks')
+                                ->where('id', $info->id)
+                                ->update(['semester_marks_updated' => 'no']);
+                    } else {
+                        DB::table('diploma_semester_marks')
+                                ->where('id', $info->id)
+                                ->update(['semester_marks_updated' => 'no']);
+                    }
                 }
             }
         }
@@ -118,26 +137,58 @@ class sanctionAmountController extends Controller {
 
         if ($request->ajax()) {
             $output = '';
+            $data = [];
             $query = $request->get('query');
 
             if ($query != '') {
-                $data = DB::table('registerusers')
+                $data1 = DB::table('registerusers')
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
+                        ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
                         ->where('S1.in_process_with', '=', 'issuer')
                         ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
+                        ->where('diploma_semester_marks.semester_marks_updated', '=', 'yes')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
                         ->orderBy('registerusers.id', 'ASC')
                         ->get();
-            } else {
-                $data = DB::table('registerusers')
+
+                $data2 = DB::table('registerusers')
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
                         ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
+                        ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
                         ->where('S1.in_process_with', '=', 'issuer')
                         ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
+                        ->where('be_semester_marks.semester_marks_updated', '=', 'yes')
+                        ->where('registerusers.id', 'LIKE', '%' . $query . '%')
+                        ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
                         ->orderBy('registerusers.id', 'ASC')
                         ->get();
+                
+                $data = $data1->merge($data2);
+                
+            } else {
+                $data1 = DB::table('registerusers')
+                        ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
+                        ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
+                        ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
+                        ->where('S1.in_process_with', '=', 'issuer')
+                        ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
+                        ->where('diploma_semester_marks.semester_marks_updated', '=', 'yes')
+                        ->orderBy('registerusers.id', 'ASC')
+                        ->get();
+
+                $data2 = DB::table('registerusers')
+                        ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
+                        ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
+                        ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
+                        ->where('S1.in_process_with', '=', 'issuer')
+                        ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
+                        ->where('be_semester_marks.semester_marks_updated', '=', 'yes')
+                        ->orderBy('registerusers.id', 'ASC')
+                        ->get();
+
+                $data = $data1->merge($data2);
             }
 
             $total_row = $data->count();
