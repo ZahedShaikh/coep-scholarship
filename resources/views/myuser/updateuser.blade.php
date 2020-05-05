@@ -103,12 +103,9 @@
 
                         <div class="form-group row">
                             <label for="yearOfAdmission" class="col-md-4 col-form-label text-md-right">{{ __('Year of admission') }}</label>
-                            <div class="col-md-6 input-group date" data-provide="datepicker">
-                                <input id="yearOfAdmission" name="yearOfAdmission" type="text" class="form-control"
-                                       value="{{ $info->yearOfAdmission }}"  {{ $freeze }}>
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </div>
+                            <div class="col-md-6">
+                                <select id="yearOfAdmission" name="yearOfAdmission" class="form-control">
+                                </select>
                             </div>
                         </div>
 
@@ -136,4 +133,19 @@
         </div>
     </div>
 </div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"></script>
+<script>
+    var currentYear = (new Date).getFullYear();
+    var option = '';
+    for (var i = (currentYear - 4); i <= currentYear; i++) {
+        option += '<option value="' + i + '">' + i + '</option>';
+    }
+    $('#yearOfAdmission').append(option);
+    console.log();
+    $("#yearOfAdmission").val({{$info->yearOfAdmission}});
+</script>
+
 @endsection

@@ -42,13 +42,6 @@ class userupdateController extends Controller {
         if ($info->freeze == 'yes') {
             $freeze = 'disabled';
         }
-
-        $s = "-07-01";
-        $str = $info->yearOfAdmission . " " . $s;
-        $str = str_replace(' ', '', $str);
-        $date = date($str);
-        $info->yearOfAdmission = $date;
-
         return view('myuser.updateuser', compact('info', 'freeze'));
     }
 
@@ -87,8 +80,6 @@ class userupdateController extends Controller {
             }
             DB::table('scholarship_status')->where('id', '=', $studentID)->delete();
 
-            $year = date('Y', strtotime($input['yearOfAdmission']));
-            $input['yearOfAdmission'] = $year;
             //Incrementing Form Version
             $task->version = $task->version + 1;
 
