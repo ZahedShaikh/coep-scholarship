@@ -23,6 +23,8 @@ Route::get('/profileprint', 'ProfilePrintController@show')->name('profileprint')
 
 
 
+
+
 /*  Admin Page
  */
 
@@ -50,6 +52,7 @@ Route::get('/getAllStudentsDetails', 'displayAllStudentsDetails@index')->name('g
 Route::get('/showAllStudentsDetails', 'displayAllStudentsDetails@show')->name('showAllStudentsDetails');
 
 Route::get('/charts', 'Charts@index')->name('charts');
+Route::get('/updateCharts', 'Charts@update')->name('updateCharts');
 
 
 // MultiAuth Routes
