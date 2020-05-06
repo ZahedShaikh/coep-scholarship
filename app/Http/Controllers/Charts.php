@@ -23,12 +23,8 @@ class Charts extends Controller {
             $gpp = [];
             $gpa = [];
 
-            $from = 2015;
-            $to = 2020;
-//                
-//            if ($query != '') {
-//                
-//            }
+            $from = $request->get('from');
+            $to = $request->get('to');
 
             for ($i = 1; $i <= 4; $i++) {
                 $coep[$i] = DB::table('transaction_history')

@@ -29,16 +29,6 @@
             </div>
         </div>
 
-        <!--        <div class="col-md-5">
-                    <div class="card">
-                        <div class="card-header" >{{ ucfirst(config('auth.prefix')) }}</div>
-                        <br>
-        
-                        <canvas id="canvas" width="50" height="50"></canvas>
-        
-                    </div>
-                </div>-->
-
     </div>
 
 </div>
@@ -48,6 +38,8 @@
 
     $(document).ready(function () {
 
+        var myChart;
+        var FLG = false;
         //  Dynamic selection of college
         $("#select-college, #select-category").change(function () {
             var selectedCollege = $("#select-college").val();
@@ -84,8 +76,8 @@
                 dataType: "json",
                 success: function (data)
                 {
-                    console.log("GOOD: " + data);
-                    functionChart(data);
+                    functionChart(data, FLG);
+                    FLG = true;
                 },
                 error: function (data) {
                     console.log(data.status + " " + data.statusText);
@@ -93,6 +85,114 @@
             });
         }
 
+
+        function functionChart(data1, FLG) {
+
+            if (FLG) {
+                myChart.data.datasets[0].data = data1['FY'];
+                myChart.data.datasets[1].data = data1['SY'];
+                myChart.data.datasets[2].data = data1['TY'];
+                myChart.data.datasets[3].data = data1['BE'];
+                myChart.update({
+                    duration: 500,
+                    easing: 'easeInQuad'
+                });
+            } else {
+
+                var chartdata = {
+                    type: 'bar',
+                    data: {
+                        labels: data1['College'],
+                        // labels: month,
+                        datasets: [
+                            {
+                                label: 'FY',
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1,
+                                data: data1['FY']
+                            },
+                            {
+                                label: 'SY',
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1,
+                                data: data1['SY']
+                            }, {
+                                label: 'TY',
+                                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                                borderColor: 'rgba(255, 206, 86, 1)',
+                                borderWidth: 1,
+                                data: data1['TY']
+                            }, {
+                                label: 'BE',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+//                    barPercentage: 0.5,
+//                    barThickness: 40,
+//                    maxBarThickness: 8,
+//                    minBarLength: 2,
+//                    data: [10, 20, 30, 40, 50, 60, 70],
+                                borderWidth: 1,
+                                data: data1['BE']
+                            }
+                        ]
+                    },
+
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'bottom',
+                            display: true
+                        },
+                        "hover": {
+                            "animationDuration": 0
+                        },
+                        "animation": {
+                            "duration": 1,
+                            "onComplete": function () {
+                                var chartInstance = this.chart,
+                                        ctx = chartInstance.ctx;
+
+                                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'bottom';
+
+                                this.data.datasets.forEach(function (dataset, i) {
+                                    var meta = chartInstance.controller.getDatasetMeta(i);
+                                    meta.data.forEach(function (bar, index) {
+                                        var data = dataset.data[index];
+                                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                    });
+                                });
+                            }
+                        },
+                        title: {
+                            display: false,
+                            text: ''
+                        },
+                        scales: {
+                            yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        //max: 20
+                                    }, gridLines: {
+                                        color: "rgba(0, 0, 0, 0)"
+                                    }
+                                }
+                            ], xAxes: [{
+                                    gridLines: {
+                                        color: "rgba(1, 1, 1, 1)"
+                                    }
+                                }]
+                        }
+                    }
+                };
+
+                var ctx = document.getElementById('canvas').getContext('2d');
+                myChart = new Chart(ctx, chartdata);
+            }
+        }
 
         $('#from, #to').change(function () {
             var from = $('#from').val();
@@ -105,113 +205,7 @@
                 fetch_customer_data(from, to);
             }
         });
-
-//        (function ($) {
-//            $.fn.assign = function (msg) {
-//                assignScholarshipFunction(msg);
-//            };
-//        })(jQuery);
-
     });
-
-    function functionChart(data1) {
-        console.log("----------------------" + data1['College'] + "----------------------------------");
-
-        var chartdata = {
-            type: 'bar',
-            data: {
-                labels: data1['College'],
-                // labels: month,
-                datasets: [
-                    {
-                        label: 'FY',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1,
-                        data: [10, 20, 30, 50]
-                    },
-                    {
-                        label: 'SY',
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1,
-                        data: [10, 20, 30, 50]
-                    }, {
-                        label: 'TY',
-                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                        borderColor: 'rgba(255, 206, 86, 1)',
-                        borderWidth: 1,
-                        data: [10, 20, 30, 50]
-                    }, {
-                        label: 'BE',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-//                    barPercentage: 0.5,
-//                    barThickness: 40,
-//                    maxBarThickness: 8,
-//                    minBarLength: 2,
-//                    data: [10, 20, 30, 40, 50, 60, 70],
-                        borderWidth: 1,
-                        data: [10, 20, 30, 50]
-                    }
-                ]
-            },
-
-            options: {
-                responsive: true,
-                legend: {
-                    position: 'bottom',
-                    display: true
-                },
-                "hover": {
-                    "animationDuration": 0
-                },
-                "animation": {
-                    "duration": 1,
-                    "onComplete": function () {
-                        var chartInstance = this.chart,
-                                ctx = chartInstance.ctx;
-
-                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'bottom';
-
-                        this.data.datasets.forEach(function (dataset, i) {
-                            var meta = chartInstance.controller.getDatasetMeta(i);
-                            meta.data.forEach(function (bar, index) {
-                                var data = dataset.data[index];
-                                ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                            });
-                        });
-                    }
-                },
-                title: {
-                    display: false,
-                    text: ''
-                },
-                scales: {
-                    yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                //max: 20
-                            }, gridLines: {
-                                color: "rgba(0, 0, 0, 0)"
-                            }
-                        }
-                    ], xAxes: [{
-                            gridLines: {
-                                color: "rgba(1, 1, 1, 1)"
-                            }
-                        }]
-                }
-            }
-        };
-        console.log(chartdata);
-
-        var ctx = document.getElementById('canvas').getContext('2d');
-        new Chart(ctx, chartdata);
-
-    }
 
 </script>
 
