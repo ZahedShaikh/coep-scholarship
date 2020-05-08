@@ -18,17 +18,35 @@ class displayAllStudentsDetails extends Controller {
             $from = $request->get('from');
             $to = $request->get('to');
 
-            $data1 = DB::table('registerusers')
+            $data_DE = DB::table('registerusers')
                     ->join('scholarship_accepted_list', 'scholarship_accepted_list.id', '=', 'registerusers.id')
+                    ->join('bank_details', 'bank_details.id', '=', 'scholarship_accepted_list.id')
+                    ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
                     ->Where('yearOfAdmission', '>=', date('' . $from . ''))
                     ->Where('yearOfAdmission', '<=', date('' . $to . ''))
                     ->orderBy('registerusers.id', 'ASC')
+                    ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'registerusers.created_at', 'registerusers.updated_at',
+                            'bank_Name', 'account_No', 'IFSC_Code', 'branch', 'bank_details_updated',
+                            'semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'CGPA', 'semester_marks_updated')
                     ->get();
 
-            $total_row = $data1->count();
+            $data_BE = DB::table('registerusers')
+                    ->join('scholarship_accepted_list', 'scholarship_accepted_list.id', '=', 'registerusers.id')
+                    ->join('bank_details', 'bank_details.id', '=', 'scholarship_accepted_list.id')
+                    ->join('be_semester_marks', 'be_semester_marks.id', '=', 'scholarship_accepted_list.id')
+                    ->Where('yearOfAdmission', '>=', date('' . $from . ''))
+                    ->Where('yearOfAdmission', '<=', date('' . $to . ''))
+                    ->orderBy('registerusers.id', 'ASC')
+                    ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'registerusers.created_at', 'registerusers.updated_at',
+                            'bank_Name', 'account_No', 'IFSC_Code', 'branch', 'bank_details_updated',
+                            'semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'semester7', 'semester8', 'CGPA', 'semester_marks_updated')
+                    ->get();
+
+            $export_data = $data_BE->merge($data_DE);
+            $total_row = $export_data->count();
 
             if ($total_row > 0) {
-                foreach ($data1 as $row) {
+                foreach ($export_data as $row) {
                     $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
                     $output .= '
                     <tr id=\"' . $row->id . '\">
@@ -54,17 +72,15 @@ class displayAllStudentsDetails extends Controller {
 
             $data = array(
                 'table_data' => $output,
-                'total_data' => $total_row
+                'total_data' => $total_row,
+                'export_data' => $export_data->toArray()
             );
+
             echo json_encode($data);
         }
     }
 
-    public function sanction() {
-        //
-    }
-
-    public function edit() {
+    public function exportExt() {
         //
     }
 

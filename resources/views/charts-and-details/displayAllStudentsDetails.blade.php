@@ -13,19 +13,19 @@
                 <br>
 
                 <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <label for="from">From</label>
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold" for="from">From</label>
                         <select id="from" name="category" class="form-control">
                         </select>
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="to">To</label>
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold" for="to">To</label>
                         <select id="to" name="category" class="form-control">
                         </select>
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label for="select-college">Select College</label>
+                        <label class="font-weight-bold" for="select-college">Select College</label>
                         <select class="selectpicker" id="select-college" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
                             <option value="coep" selected="">College of Engineering Pune</option>   <!-- B.Tech !-->
                             <option value="gcoer" selected="">Government College of Engineering and Research Avasari</option><!-- B.Tech !-->
@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label for="select-category">Select Category</label>
+                        <label class="font-weight-bold" for="select-category">Select Category</label>
                         <select class="selectpicker" id="select-category" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
                             <option value="OPEN" selected="">Open</option>
                             <option value="OBC" selected="">OBC</option>
@@ -52,12 +52,22 @@
                             <option value="OTHER" selected="">Other</option>
                         </select>
                     </div>
+
+                    
+                    
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold">Download</label>
+                        <button type="submit" id="btn_export_delivery_order" class="btn btn-primary">
+                                {{ __('Download Data') }}
+                            </button>
+                    </div>
+
                 </div>
 
                 <br>
 
                 <div class="table-responsive" id='tableID'>
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered" id='mytableID'>
                         <thead>
                             <tr>
                                 <th>Form ID</th>
@@ -91,6 +101,10 @@
 </div>
 
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.0/shim.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.0/xlsx.mini.min.js"></script>
+
+
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -115,6 +129,7 @@
         fetch_customer_data(currentYear - 1, currentYear);
 
         // Call for givan year
+        var myData;
         function fetch_customer_data(from, to)
         {
             $.ajaxSetup({
@@ -133,18 +148,28 @@
                 {
                     $('tbody').html(data.table_data);
                     $('#total_records').text(data.total_data);
+                    myData = data.export_data;
 
                     // check for other filter values as well
                     var selectedCollege = $("#select-college").val();
                     var selectedCategory = $("#select-category").val();
                     functionCollege(selectedCollege, selectedCategory);
-
                 },
                 error: function (data) {
                     console.log(data.status + " " + data.statusText);
                 }
             });
         }
+
+
+        $("#btn_export_delivery_order").click(function (e) {
+            //console.log(myData);
+            let binaryWS = XLSX.utils.json_to_sheet(myData);
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+            XLSX.writeFile(wb, 'EWL.xlsx');
+        });
+
 
         $('#from, #to').change(function () {
             var from = $('#from').val();

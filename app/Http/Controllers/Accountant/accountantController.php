@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Accountant;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -104,8 +104,8 @@ class accountantController extends Controller {
 
                 DB::table('scholarship_status')
                         ->where('id', $studentID)
-                        ->update(['in_process_with' => 'issuer', 
-                            'prev_amount_received_in_semester'=> $temp->receiving_amount_for_semester]);
+                        ->update(['in_process_with' => 'issuer',
+                            'prev_amount_received_in_semester' => $temp->receiving_amount_for_semester]);
 
                 DB::table('transaction_history')->insert(
                         ['id' => $studentID,
@@ -117,7 +117,7 @@ class accountantController extends Controller {
                             'created_at' => Carbon::now(),
                             'updated_at' => now()]
                 );
-                
+
                 DB::table('amount_sanctioned_by_issuer')->where('id', '=', $studentID)->delete();
                 DB::commit();
             } catch (\Exception $e) {
