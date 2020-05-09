@@ -26,7 +26,7 @@ class accountantController extends Controller {
                         ->join('bank_details', 'registerusers.id', '=', 'bank_details.id')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
-//                        ->select('registerusers.name', 'registerusers.middleName', 'registerusers.surName', 'registerusers.contact', 'registerusers.college',
+//                        ->select('registerusers.id', 'registerusers.name', 'registerusers.middleName', 'registerusers.surName', 'registerusers.contact', 'registerusers.college',
 //                                'bank_details.bank_Name', 'bank_details.IFSC_Code', 'bank_details.account_No', 'bank_details.branch',
 //                                'amount_sanctioned_by_issuer.amount', 'amount_sanctioned_by_issuer.now_receiving_amount_for_semester')
                         ->orderBy('registerusers.college', 'ASC')
@@ -35,7 +35,7 @@ class accountantController extends Controller {
                 $data = DB::table('registerusers')
                         ->join('amount_sanctioned_by_issuer', 'registerusers.id', '=', 'amount_sanctioned_by_issuer.id')
                         ->join('bank_details', 'registerusers.id', '=', 'bank_details.id')
-//                        ->select('registerusers.name', 'registerusers.middleName', 'registerusers.surName', 'registerusers.contact', 'registerusers.college',
+//                        ->select('registerusers.id', 'registerusers.name', 'registerusers.middleName', 'registerusers.surName', 'registerusers.contact', 'registerusers.college',
 //                                'bank_details.bank_Name', 'bank_details.IFSC_Code', 'bank_details.account_No', 'bank_details.branch',
 //                                'amount_sanctioned_by_issuer.amount', 'amount_sanctioned_by_issuer.receiving_amount_for_semester')
                         ->orderBy('registerusers.college', 'ASC')

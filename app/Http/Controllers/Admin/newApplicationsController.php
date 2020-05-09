@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ScholarshipStatus;
 use App\scholarship_accepted_list;
-use App\scholarship_rejected_list;
 use Illuminate\Support\Facades\DB;
 
 class newApplicationsController extends Controller {
@@ -59,7 +58,8 @@ class newApplicationsController extends Controller {
                     $output .= '
                     <tr id=\"' . $row->id . '\">
                     <td align=\'center\'>' . $row->id . '</td>
-                    <td>' . $fullName . '</td>
+                    <td>' . $row->version . '</td>
+                    <td align=\'left\'>' . $fullName . '</td>
                     <td>' . $row->college . '</td>
                     <td>' . $row->contact . "</td>
                     <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Sanction</a> </td>
@@ -69,7 +69,7 @@ class newApplicationsController extends Controller {
             } else {
                 $output = '
             <tr>
-            <td align="center" colspan="5">No Data Found</td>
+            <td align="center" colspan="6">No Data Found</td>
             </tr>
             ';
             }
@@ -95,9 +95,22 @@ class newApplicationsController extends Controller {
             try {
                 DB::beginTransaction();
 
-                ScholarshipStatus::create([
-                    'id' => $studentID,
-                ]);
+                $data = DB::table('registerusers')
+                        ->where('id', '=', $studentID)
+                        ->select('directSY')
+                        ->first();
+
+                if ($data->directSY == 'yes') {
+                    ScholarshipStatus::create([
+                        'id' => $studentID,
+                        'prev_amount_received_in_semester' => 2,
+                        'now_receiving_amount_for_semester' => 2
+                    ]);
+                } else {
+                    ScholarshipStatus::create([
+                        'id' => $studentID
+                    ]);
+                }
 
                 scholarship_accepted_list::create([
                     'id' => $studentID,
@@ -138,11 +151,10 @@ class newApplicationsController extends Controller {
                 );
                 $COUNT++;
             }
-            
-            DB::table('registerusers')->whereIn('id', $remainingIDs)->delete(); 
+
+            DB::table('registerusers')->whereIn('id', $remainingIDs)->delete();
             DB::table('scholarship_applicants')->truncate();
             DB::commit();
-            
         } catch (\Exception $e) {
             DB::rollback();
             dd($e);

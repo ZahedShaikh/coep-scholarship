@@ -14,16 +14,17 @@
 
                 <div id='tableID'>
                     <table class="table table-hover" id='mytableID'>
-                        <thead class="thead-light">
+                        <thead class="thead-light"  align='center'>
                             <tr>
                                 <th>Form ID</th>
+                                <th>Version</th>
                                 <th>Name</th>
                                 <th>College</th>
                                 <th>Contact</th>
                                 <th>Accept</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody  align='center'>
 
                         </tbody>
                     </table>

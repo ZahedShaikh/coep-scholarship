@@ -76,11 +76,13 @@ class displayAllStudentsDetails extends Controller {
                 'export_data' => $export_data->toArray()
             );
 
+            error_log(print_r($data, true));
+
             echo json_encode($data);
         }
     }
 
-    public function exportExt() {
+    public function transactionShow() {
         //
     }
 

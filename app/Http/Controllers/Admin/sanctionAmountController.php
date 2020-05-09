@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class sanctionAmountController extends Controller {
 
     public function index() {
-        
+
         $this->updateStatus();
         return view('admin.auth.sendSanctionAmountToAccounts');
     }
@@ -25,11 +25,10 @@ class sanctionAmountController extends Controller {
 
             if ($query != '') {
                 $data1 = DB::table('registerusers')
-                        ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
-                        ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
+                        ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                         ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
-                        ->where('S1.in_process_with', '=', 'issuer')
-                        ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
+                        ->where('in_process_with', '=', 'issuer')
+                        ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
                         ->where('diploma_semester_marks.semester_marks_updated', '=', 'yes')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
@@ -37,11 +36,10 @@ class sanctionAmountController extends Controller {
                         ->get();
 
                 $data2 = DB::table('registerusers')
-                        ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
-                        ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
+                        ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                         ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
-                        ->where('S1.in_process_with', '=', 'issuer')
-                        ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
+                        ->where('in_process_with', '=', 'issuer')
+                        ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
                         ->where('be_semester_marks.semester_marks_updated', '=', 'yes')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
@@ -51,21 +49,19 @@ class sanctionAmountController extends Controller {
                 $data = $data1->merge($data2);
             } else {
                 $data1 = DB::table('registerusers')
-                        ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
-                        ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
+                        ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                         ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
-                        ->where('S1.in_process_with', '=', 'issuer')
-                        ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
+                        ->where('in_process_with', '=', 'issuer')
+                        ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
                         ->where('diploma_semester_marks.semester_marks_updated', '=', 'yes')
                         ->orderBy('registerusers.id', 'ASC')
                         ->get();
 
                 $data2 = DB::table('registerusers')
-                        ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
-                        ->join('scholarship_status AS S2', 'registerusers.id', '=', 'S2.id')
+                        ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                         ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
-                        ->where('S1.in_process_with', '=', 'issuer')
-                        ->where('S1.prev_amount_received_in_semester', '=', 'S2.now_receiving_amount_for_semester')
+                        ->where('in_process_with', '=', 'issuer')
+                        ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
                         ->where('be_semester_marks.semester_marks_updated', '=', 'yes')
                         ->orderBy('registerusers.id', 'ASC')
                         ->get();
@@ -207,7 +203,7 @@ class sanctionAmountController extends Controller {
         $data = DB::table('registerusers')
                 ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                 ->where('scholarship_status.in_process_with', '=', 'issuer')
-                ->where('scholarship_status.prev_amount_received_in_semester', '=', 'scholarship_status.now_receiving_amount_for_semester')
+                ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
                 ->orderBy('registerusers.id', 'desc')
                 ->select('registerusers.id', 'registerusers.yearOfAdmission', 'college', 'directSY')
                 ->get();
