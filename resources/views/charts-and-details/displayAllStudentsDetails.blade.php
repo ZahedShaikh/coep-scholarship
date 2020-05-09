@@ -2,7 +2,7 @@
 @section('content')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 <div class="container">
@@ -53,13 +53,13 @@
                         </select>
                     </div>
 
-                    
-                    
+
+
                     <div class="form-group col-md-2">
                         <label class="font-weight-bold">Download</label>
-                        <button type="submit" id="btn_export_delivery_order" class="btn btn-primary">
-                                {{ __('Download Data') }}
-                            </button>
+                        <button type="submit" id="btn_export" class="btn btn-primary">
+                            {{ __('Download Data') }}
+                        </button>
                     </div>
 
                 </div>
@@ -103,7 +103,6 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.0/shim.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.0/xlsx.mini.min.js"></script>
-
 
 <script type="text/javascript">
 
@@ -161,12 +160,26 @@
             });
         }
 
+        $("#btn_export").click(function (e) {
+            var myFilteredData = [];
+            var selectedCollege = $("#select-college").val();
+            var selectedCategory = $("#select-category").val();
 
-        $("#btn_export_delivery_order").click(function (e) {
-            //console.log(myData);
-            let binaryWS = XLSX.utils.json_to_sheet(myData);
+            for (var j = 0; j < myData.length; j++) {
+                for (var p = 0; p < selectedCollege.length; p++) {
+                    if ((myData[j])['college'] === selectedCollege[p]) {
+                        for (var q = 0; q < selectedCategory.length; q++) {
+                            if ((myData[j])['category'] === selectedCategory[q]) {
+                                myFilteredData.push(myData[j]);
+                            }
+                        }
+                    }
+                }
+            }
+            //console.log(myFilteredData);
+            let binaryWS = XLSX.utils.json_to_sheet(myFilteredData);
             var wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+            XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values');
             XLSX.writeFile(wb, 'EWL.xlsx');
         });
 
