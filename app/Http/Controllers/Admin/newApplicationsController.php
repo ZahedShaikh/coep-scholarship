@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ScholarshipStatus;
 use App\scholarship_accepted_list;
@@ -32,9 +32,8 @@ class newApplicationsController extends Controller {
 
             if ($query != '') {
 
-                $data = DB::table('registerusers')->join('scholarship_applicants', function ($join) {
-                            $join->on('registerusers.id', '=', 'scholarship_applicants.id');
-                        })
+                $data = DB::table('registerusers')
+                        ->join('scholarship_applicants', 'registerusers.id', '=', 'scholarship_applicants.id')
                         ->join('bank_details', 'bank_details.id', '=', 'registerusers.id')
                         ->where('bank_details.bank_details_updated', '=', 'yes')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
@@ -43,9 +42,7 @@ class newApplicationsController extends Controller {
                         ->get();
             } else {
                 $data = DB::table('registerusers')
-                        ->join('scholarship_applicants', function ($join) {
-                            $join->on('registerusers.id', '=', 'scholarship_applicants.id');
-                        })
+                        ->join('scholarship_applicants', 'registerusers.id', '=', 'scholarship_applicants.id')
                         ->join('bank_details', 'bank_details.id', '=', 'registerusers.id')
                         ->where('bank_details.bank_details_updated', '=', 'yes')
                         ->orderBy('registerusers.id', 'ASC')
@@ -120,31 +117,39 @@ class newApplicationsController extends Controller {
     }
 
     public function reject() {
-        if ($request->ajax()) {
-            $output = false;
+        try {
+            DB::beginTransaction();
 
-            try {
-                DB::beginTransaction();
-
-                $remainingIDs = DB::table('scholarship_applicants')->select('id');
-
-                foreach ($remainingIDs as $answers) {
-                    scholarship_rejected_list::create([
-                        'id' => $answers,
-                    ]);
-                }
-
-                DB::table('scholarship_applicants')->truncate();
-
-                DB::commit();
-                $output = true;
-            } catch (\Exception $e) {
-                DB::rollback();
-                return redirect(route('admin.auth.newScholarshipApplications'))->with('message', 'Something went wrong');
+            $remainingIDs = \App\scholarship_applicants::where('id', '>', 0)->pluck('id')->toArray();
+            $registerusers = DB::table('registerusers')->whereIn('id', $remainingIDs)->get()->toArray();
+            $COUNT = 0;
+            foreach ($remainingIDs as $studentID) {
+                DB::table('scholarship_rejected_list')->insert([
+                    'id' => $studentID,
+                    'name' => $registerusers[$COUNT]->name,
+                    'middleName' => $registerusers[$COUNT]->middleName,
+                    'surName' => $registerusers[$COUNT]->surName,
+                    'category' => $registerusers[$COUNT]->category,
+                    'gender' => $registerusers[$COUNT]->gender,
+                    'yearOfAdmission' => $registerusers[$COUNT]->yearOfAdmission,
+                    'contact' => $registerusers[$COUNT]->contact,
+                    'college' => $registerusers[$COUNT]->college,
+                    'email' => $registerusers[$COUNT]->email]
+                );
+                $COUNT++;
             }
-
-            echo json_encode($output);
+            
+            DB::table('registerusers')->whereIn('id', $remainingIDs)->delete(); 
+            DB::table('scholarship_applicants')->truncate();
+            DB::commit();
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            return redirect(route('admin.home'))->withErrors('message', 'Something went wrong. Please contact Dev. Error code:newApplicationsController');
         }
+
+        return redirect(route('admin.home'))->with('message', 'Successfully Rejected all application');
     }
 
     public function edit(ScholarshipStatus $ScholarshipStatus) {
@@ -154,4 +159,5 @@ class newApplicationsController extends Controller {
     public function destroy(ScholarshipStatus $ScholarshipStatus) {
         //
     }
+
 }
