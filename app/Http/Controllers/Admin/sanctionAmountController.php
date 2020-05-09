@@ -11,125 +11,8 @@ use Illuminate\Support\Facades\DB;
 class sanctionAmountController extends Controller {
 
     public function index() {
-        // Somehow dont know, In this query '=' means '!=' 
-        // and '!=' means '='
-
-        $data = DB::table('registerusers')
-                ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
-                ->where('scholarship_status.in_process_with', '=', 'issuer')
-                ->where('scholarship_status.prev_amount_received_in_semester', '=', 'scholarship_status.now_receiving_amount_for_semester')
-                ->orderBy('registerusers.id', 'desc')
-                ->select('registerusers.id', 'registerusers.yearOfAdmission', 'college', 'directSY')
-                ->get();
-
-        $total_row = $data->count();
-        if ($total_row > 0) {
-            foreach ($data as $info) {
-                $forSemester = $this->checkSemester($info);
-                $BE = true;
-                if ($info->college == 'coep' ||
-                        $info->college == 'gcoer' ||
-                        $info->college == 'gcoek') {
-                    switch ($info->college) {
-                        case 'coep':
-                            $info->college = 'College of Engineering Pune';
-                            break;
-                        case 'gcoer':
-                            $info->college = 'GCOER, Avasari';
-                            break;
-                        case 'gcoek':
-                            $info->college = 'GCE, Karad';
-                            break;
-                    }
-                    $semester_marks = DB::table('be_semester_marks')
-                            ->where('id', $info->id)
-                            ->select('semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'semester7', 'semester8', 'CGPA')
-                            ->first();
-                } else {
-                    switch ($info->college) {
-                        case 'gpp':
-                            $info->college = 'Government Polytechnic Pune';
-                            break;
-                        case 'gpa':
-                            $info->college = 'Government Polytechnic Awasari';
-                            break;
-                    }
-                    $semester_marks = DB::table('diploma_semester_marks')
-                            ->where('id', $info->id)
-                            ->select('semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'CGPA')
-                            ->first();
-                    $BE = false;
-                }
-
-                if ($info->directSY == 'yes') {
-                    $forSemester += 2;
-                }
-
-                $flg = false;
-
-                switch ($forSemester) {
-                    case 8:
-                        if (($semester_marks->semester8) != null) {
-                            $flg = true;
-                        }
-                        break;
-                    case 7:
-                        if (($semester_marks->semester7) != null) {
-                            $flg = true;
-                        }
-                        break;
-                    case 6:
-                        if (($semester_marks->semester6) != null) {
-                            $flg = true;
-                        }
-                        break;
-                    case 5:
-                        if (($semester_marks->semester5) != null) {
-                            $flg = true;
-                        }
-                        break;
-                    case 4:
-                        if (($semester_marks->semester4) != null) {
-                            $flg = true;
-                        }
-                        break;
-                    case 3:
-                        if (($semester_marks->semester3) != null) {
-                            $flg = true;
-                        }
-                        break;
-                    case 2:
-                        if (($semester_marks->semester2) != null) {
-                            $flg = true;
-                        }
-                        break;
-                    case 1:
-                        if (($semester_marks->semester1) != null) {
-                            $flg = true;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                if ($flg) {
-                    DB::table('scholarship_status')
-                            ->where('id', $info->id)
-                            ->update(['now_receiving_amount_for_semester' => $forSemester]);
-                } else {
-                    if ($BE) {
-                        DB::table('be_semester_marks')
-                                ->where('id', $info->id)
-                                ->update(['semester_marks_updated' => 'no']);
-                    } else {
-                        DB::table('diploma_semester_marks')
-                                ->where('id', $info->id)
-                                ->update(['semester_marks_updated' => 'no']);
-                    }
-                }
-            }
-        }
-
+        
+        $this->updateStatus();
         return view('admin.auth.sendSanctionAmountToAccounts');
     }
 
@@ -164,9 +47,8 @@ class sanctionAmountController extends Controller {
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
                         ->orderBy('registerusers.id', 'ASC')
                         ->get();
-                
+
                 $data = $data1->merge($data2);
-                
             } else {
                 $data1 = DB::table('registerusers')
                         ->join('scholarship_status AS s1', 'registerusers.id', '=', 'S1.id')
@@ -286,8 +168,157 @@ class sanctionAmountController extends Controller {
      * @param  \App\ScholarshipStatus  $ScholarshipStatus
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ScholarshipStatus $ScholarshipStatus) {
-        //
+    public function status() {
+
+        $this->updateStatus();
+        $output = '';
+
+        $data_DE = DB::table('registerusers')
+                ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
+                ->where('diploma_semester_marks.semester_marks_updated', '=', 'no')
+                ->orderBy('registerusers.college', 'ASC')
+                ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'registerusers.created_at', 'registerusers.updated_at',
+                        'semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'CGPA', 'semester_marks_updated')
+                ->get();
+
+        $data_BE = DB::table('registerusers')
+                ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
+                ->where('be_semester_marks.semester_marks_updated', '=', 'no')
+                ->orderBy('registerusers.college', 'ASC')
+                ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'registerusers.created_at', 'registerusers.updated_at',
+                        'semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'CGPA', 'semester_marks_updated')
+                ->get();
+
+        $export_data = $data_BE->merge($data_DE);
+        $total_row = $export_data->count();
+
+        $data = array(
+            'total_data' => $total_row,
+            'export_data' => $export_data->toArray()
+        );
+
+        return view('admin.auth.studentsStatus', compact('data'));
+    }
+
+    public function updateStatus() {
+        // Somehow dont know, In this query '=' means '!=' 
+        // and '!=' means '='
+
+        $data = DB::table('registerusers')
+                ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
+                ->where('scholarship_status.in_process_with', '=', 'issuer')
+                ->where('scholarship_status.prev_amount_received_in_semester', '=', 'scholarship_status.now_receiving_amount_for_semester')
+                ->orderBy('registerusers.id', 'desc')
+                ->select('registerusers.id', 'registerusers.yearOfAdmission', 'college', 'directSY')
+                ->get();
+
+        $total_row = $data->count();
+        if ($total_row > 0) {
+            foreach ($data as $info) {
+                $forSemester = $this->checkSemester($info);
+                $BE = true;
+                if ($info->college == 'coep' ||
+                        $info->college == 'gcoer' ||
+                        $info->college == 'gcoek') {
+                    switch ($info->college) {
+                        case 'coep':
+                            $info->college = 'College of Engineering Pune';
+                            break;
+                        case 'gcoer':
+                            $info->college = 'GCOER, Avasari';
+                            break;
+                        case 'gcoek':
+                            $info->college = 'GCE, Karad';
+                            break;
+                    }
+                    $semester_marks = DB::table('be_semester_marks')
+                            ->where('id', $info->id)
+                            ->select('semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'semester7', 'semester8', 'CGPA')
+                            ->first();
+                } else {
+                    switch ($info->college) {
+                        case 'gpp':
+                            $info->college = 'Government Polytechnic Pune';
+                            break;
+                        case 'gpa':
+                            $info->college = 'Government Polytechnic Awasari';
+                            break;
+                    }
+                    $semester_marks = DB::table('diploma_semester_marks')
+                            ->where('id', $info->id)
+                            ->select('semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'CGPA')
+                            ->first();
+                    $BE = false;
+                }
+
+                if ($info->directSY == 'yes') {
+                    $forSemester += 2;
+                }
+
+                $flg = false;
+
+                switch ($forSemester) {
+                    case 8:
+                        if (($semester_marks->semester8) != null) {
+                            $flg = true;
+                        }
+                        break;
+                    case 7:
+                        if (($semester_marks->semester7) != null) {
+                            $flg = true;
+                        }
+                        break;
+                    case 6:
+                        if (($semester_marks->semester6) != null) {
+                            $flg = true;
+                        }
+                        break;
+                    case 5:
+                        if (($semester_marks->semester5) != null) {
+                            $flg = true;
+                        }
+                        break;
+                    case 4:
+                        if (($semester_marks->semester4) != null) {
+                            $flg = true;
+                        }
+                        break;
+                    case 3:
+                        if (($semester_marks->semester3) != null) {
+                            $flg = true;
+                        }
+                        break;
+                    case 2:
+                        if (($semester_marks->semester2) != null) {
+                            $flg = true;
+                        }
+                        break;
+                    case 1:
+                        if (($semester_marks->semester1) != null) {
+                            $flg = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if ($flg) {
+                    DB::table('scholarship_status')
+                            ->where('id', $info->id)
+                            ->update(['now_receiving_amount_for_semester' => $forSemester]);
+                } else {
+                    if ($BE) {
+                        DB::table('be_semester_marks')
+                                ->where('id', $info->id)
+                                ->update(['semester_marks_updated' => 'no']);
+                    } else {
+                        DB::table('diploma_semester_marks')
+                                ->where('id', $info->id)
+                                ->update(['semester_marks_updated' => 'no']);
+                    }
+                }
+            }
+        }
     }
 
     public function checkSemester($info) {

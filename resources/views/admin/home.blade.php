@@ -27,6 +27,13 @@
                             <a href="{{ route('getSanctionAmount') }}" class="btn btn-group-toggle btn-primary mr-3">Sanction</a>
                         </li>
                     </div>
+                    
+                    <div class="float-right">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <label for="Student's data status" class="col-md-6 col-form-label text-md-right">{{ __('Students data status') }}</label>
+                            <a href="{{ route('StudentsDataStatus') }}" class="btn btn-group-toggle btn-primary mr-3">Show</a>
+                        </li>
+                    </div>
  
                     <div class="float-right">
                         <li class="list-group-item d-flex justify-content-between align-items-center">

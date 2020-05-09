@@ -39,6 +39,7 @@ Route::get('/getSanctionAmount', 'Admin\sanctionAmountController@index')->name('
 Route::get('/showSanctionAmount', 'Admin\sanctionAmountController@show')->name('showSanctionAmount');
 Route::get('/sendSanctionAmount', 'Admin\sanctionAmountController@send')->name('sendSanctionAmount');
 Route::get('/sanctionAllApplications', 'Admin\sanctionAmountController@sanction')->name('sanctionAllApplications');
+Route::get('/StudentsDataStatus', 'Admin\sanctionAmountController@status')->name('StudentsDataStatus');
 
 
 //  Here Accountant will credit all amount to stduents account
