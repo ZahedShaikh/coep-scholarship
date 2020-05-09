@@ -88,11 +88,19 @@
 
         function functionChart(data1, FLG) {
 
+            Array.prototype.max = function () {
+                return Math.max.apply(null, this);
+            };
+
+            // Y axis will always greater by 1 for misalignment
+            var myMax = [data1['FY'].max(), data1['SY'].max(), data1['TY'].max(), data1['BE'].max()].max() + 1;
+
             if (FLG) {
                 myChart.data.datasets[0].data = data1['FY'];
                 myChart.data.datasets[1].data = data1['SY'];
                 myChart.data.datasets[2].data = data1['TY'];
                 myChart.data.datasets[3].data = data1['BE'];
+                myChart.options.scales.yAxes[0].ticks.max = myMax;
                 myChart.update({
                     duration: 500,
                     easing: 'easeInQuad'
@@ -175,7 +183,7 @@
                             yAxes: [{
                                     ticks: {
                                         beginAtZero: true,
-                                        //max: 20
+                                        max: myMax
                                     }, gridLines: {
                                         color: "rgba(0, 0, 0, 0)"
                                     }
