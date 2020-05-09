@@ -177,7 +177,7 @@ class sanctionAmountController extends Controller {
                 ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
                 ->where('diploma_semester_marks.semester_marks_updated', '=', 'no')
                 ->orderBy('registerusers.college', 'ASC')
-                ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'registerusers.created_at', 'registerusers.updated_at',
+                ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'email', 'registerusers.created_at', 'registerusers.updated_at',
                         'semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'CGPA', 'semester_marks_updated')
                 ->get();
 
@@ -185,7 +185,7 @@ class sanctionAmountController extends Controller {
                 ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
                 ->where('be_semester_marks.semester_marks_updated', '=', 'no')
                 ->orderBy('registerusers.college', 'ASC')
-                ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'registerusers.created_at', 'registerusers.updated_at',
+                ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'email', 'registerusers.created_at', 'registerusers.updated_at',
                         'semester1', 'semester2', 'semester3', 'semester4', 'semester5', 'semester6', 'CGPA', 'semester_marks_updated')
                 ->get();
 

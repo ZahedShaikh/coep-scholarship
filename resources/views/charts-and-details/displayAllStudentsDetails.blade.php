@@ -7,7 +7,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header" >{{ ucfirst(config('auth.prefix')) }}</div>
                 <br>
@@ -66,9 +66,9 @@
 
                 <br>
 
-                <div class="table-responsive" id='tableID'>
-                    <table class="table table-striped table-bordered" id='mytableID'>
-                        <thead>
+                <div id='tableID'>
+                    <table class="table table-hover" id='mytableID'>
+                        <thead class="thead-light">
                             <tr>
                                 <th>Form ID</th>
                                 <th>Name</th>
@@ -78,7 +78,7 @@
                                 <th>Gender</th>
                                 <th>Current-Year</th>
                                 <th>Contact</th>
-                                <th>More Details</th>
+                                <th>Transaction History</th>
                             </tr>
                         </thead>
                         <tbody>

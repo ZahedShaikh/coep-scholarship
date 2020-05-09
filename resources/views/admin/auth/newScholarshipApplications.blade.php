@@ -12,9 +12,9 @@
                     <input type="text" name="search" id="search" class="form-control" placeholder="Search Student"/>
                 </div>
 
-                <div class="table-responsive" id='tableID'>
-                    <table class="table table-striped table-bordered">
-                        <thead>
+                <div id='tableID'>
+                    <table class="table table-hover" id='mytableID'>
+                        <thead class="thead-light">
                             <tr>
                                 <th>Form ID</th>
                                 <th>Name</th>

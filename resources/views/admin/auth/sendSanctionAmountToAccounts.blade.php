@@ -12,9 +12,9 @@
                     <input type="text" name="search" id="search" class="form-control" placeholder="Search Student"/>
                 </div>
 
-                <div class="table-responsive" id='tableID'>
-                    <table class="table table-striped table-bordered">
-                        <thead>
+                <div id='tableID'>
+                    <table class="table table-hover" id='mytableID'>
+                        <thead class="thead-light">
                             <tr>
                                 <th>Form ID</th>
                                 <th>Name</th>
@@ -36,7 +36,6 @@
                     <div class="col-md-6 offset-md-8">
                         <a href="{{ route('sanctionAllApplications') }}" class="btn btn-primary success">Sanction All Applications</a>
                         <a href="javascript:history.back()" class="btn btn-primary">Back</a>
-
                     </div>
                 </div>
                 <br>
@@ -95,8 +94,6 @@
          * Function to Sanction Amount
          * 
          */
-
-
         function assignScholarshipFunction(msg, amount, for_Sem)
         {
             $.ajaxSetup({
@@ -139,7 +136,6 @@
                 assignScholarshipFunction(msg, amount, for_Sem);
             };
         })(jQuery);
-
     });
 
 </script>

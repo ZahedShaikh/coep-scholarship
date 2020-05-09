@@ -58,7 +58,7 @@ class displayAllStudentsDetails extends Controller {
                     <td>' . $row->gender . '</td>
                     <td>' . $row->yearOfAdmission . '</td>
                     <td>' . $row->contact . "</td>
-                    <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">view</a> </td>
+                    <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Show</a> </td>
                     </tr>
                     ";
                 }
