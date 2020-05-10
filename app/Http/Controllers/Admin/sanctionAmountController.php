@@ -297,8 +297,6 @@ class sanctionAmountController extends Controller {
 
         $total_row = $data->count();
         
-        error_log(print_r($data, true));
-
         if ($total_row > 0) {
             foreach ($data as $info) {
                 $forSemester = $this->checkSemester($info);
