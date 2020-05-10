@@ -256,6 +256,7 @@ class sanctionAmountController extends Controller {
 
         $data_DE = DB::table('registerusers')
                 ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
+                ->join('scholarship_accepted_list', 'registerusers.id', '=', 'scholarship_accepted_list.id')
                 ->where('diploma_semester_marks.semester_marks_updated', '=', 'no')
                 ->orderBy('registerusers.college', 'ASC')
                 ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'email', 'registerusers.created_at', 'registerusers.updated_at',
@@ -264,6 +265,7 @@ class sanctionAmountController extends Controller {
 
         $data_BE = DB::table('registerusers')
                 ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
+                ->join('scholarship_accepted_list', 'registerusers.id', '=', 'scholarship_accepted_list.id')
                 ->where('be_semester_marks.semester_marks_updated', '=', 'no')
                 ->orderBy('registerusers.college', 'ASC')
                 ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY', 'email', 'registerusers.created_at', 'registerusers.updated_at',
