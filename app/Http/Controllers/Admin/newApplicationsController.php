@@ -103,8 +103,7 @@ class newApplicationsController extends Controller {
                 if ($data->directSY == 'yes') {
                     ScholarshipStatus::create([
                         'id' => $studentID,
-                        'prev_amount_received_in_semester' => 2,
-                        'now_receiving_amount_for_semester' => 2
+                        'prev_amount_received_in_semester' => 2
                     ]);
                 } else {
                     ScholarshipStatus::create([

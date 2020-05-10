@@ -288,12 +288,14 @@ class sanctionAmountController extends Controller {
         $data = DB::table('registerusers')
                 ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                 ->where('scholarship_status.in_process_with', '=', 'issuer')
-                ->whereRaw('scholarship_status.prev_amount_received_in_semester != scholarship_status.now_receiving_amount_for_semester')
+                //->whereRaw('scholarship_status.prev_amount_received_in_semester != scholarship_status.now_receiving_amount_for_semester')
                 ->orderBy('registerusers.id', 'desc')
                 ->select('registerusers.id', 'registerusers.yearOfAdmission', 'college', 'directSY')
                 ->get();
 
         $total_row = $data->count();
+        
+        error_log(print_r($data, true));
 
         if ($total_row > 0) {
             foreach ($data as $info) {
