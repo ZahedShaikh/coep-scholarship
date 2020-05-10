@@ -45,6 +45,7 @@ class displayAllStudentsDetails extends Controller {
             $export_data = $data_BE->merge($data_DE);
             $total_row = $export_data->count();
 
+//<td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Show</a> </td>
             if ($total_row > 0) {
                 foreach ($export_data as $row) {
                     $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
@@ -58,9 +59,8 @@ class displayAllStudentsDetails extends Controller {
                     <td>' . $row->gender . '</td>
                     <td>' . $row->yearOfAdmission . '</td>
                     <td>' . $row->contact . "</td>
-                    <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Show</a> </td>
-                    </tr>
-                    ";
+                    <td>  <a href=\"/transactionShow/$row->id\" class=\"btn btn-primary\">Show Transaction History</a>  </td>
+                    </tr>";
                 }
             } else {
                 $output = '
@@ -69,7 +69,9 @@ class displayAllStudentsDetails extends Controller {
             </tr>
             ';
             }
-
+            
+            error_log($output);
+            
             $data = array(
                 'table_data' => $output,
                 'total_data' => $total_row,
@@ -82,8 +84,23 @@ class displayAllStudentsDetails extends Controller {
         }
     }
 
-    public function transactionShow() {
-        //
+    public function transactionShow($id) {
+
+        $transaction_data = DB::table('transaction_history')
+                ->where('id', '=', $id)
+                ->get();
+
+        $total_row = $transaction_data->count();
+
+        $data = array(
+            'total_data' => $total_row,
+            'export_data' => $transaction_data->toArray()
+        );
+
+        //error_log(print_r($data, true));
+        //dd($transaction_data);
+
+        return view('admin.auth.studentsTransaction', compact('data'));
     }
 
 }

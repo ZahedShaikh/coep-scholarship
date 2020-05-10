@@ -53,8 +53,6 @@
                         </select>
                     </div>
 
-
-
                     <div class="form-group col-md-2">
                         <label class="font-weight-bold">Download</label>
                         <button type="submit" id="btn_export" class="btn btn-primary">

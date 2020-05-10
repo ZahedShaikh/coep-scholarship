@@ -38,7 +38,7 @@ Route::get('/rejectAllNewApplications', 'Admin\newApplicationsController@reject'
 Route::get('/getSanctionAmount', 'Admin\sanctionAmountController@index')->name('getSanctionAmount');
 Route::get('/showSanctionAmount', 'Admin\sanctionAmountController@show')->name('showSanctionAmount');
 Route::get('/sendSanctionAmount', 'Admin\sanctionAmountController@send')->name('sendSanctionAmount');
-Route::get('/sanctionAllApplications', 'Admin\sanctionAmountController@sanction')->name('sanctionAllApplications');
+Route::get('/sanctionAllApplications', 'Admin\sanctionAmountController@sanctionAll')->name('sanctionAllApplications');
 Route::get('/StudentsDataStatus', 'Admin\sanctionAmountController@status')->name('StudentsDataStatus');
 
 
@@ -51,6 +51,7 @@ Route::get('/creditEveryoneAmountToBank', 'Accountant\accountantController@sanct
 //  Here Accountant will credit all amount to stduents account
 Route::get('/getAllStudentsDetails', 'displayAllStudentsDetails@index')->name('getAllStudentsDetails');
 Route::get('/showAllStudentsDetails', 'displayAllStudentsDetails@show')->name('showAllStudentsDetails');
+Route::get('transactionShow/{id}', 'displayAllStudentsDetails@transactionShow')->name('transactionShow');
 
 Route::get('/charts', 'Charts@index')->name('charts');
 Route::get('/updateCharts', 'Charts@update')->name('updateCharts');

@@ -28,7 +28,7 @@ class sanctionAmountController extends Controller {
                         ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                         ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
                         ->where('in_process_with', '=', 'issuer')
-                        ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
+                        ->whereRaw('scholarship_status.prev_amount_received_in_semester != scholarship_status.now_receiving_amount_for_semester')
                         ->where('diploma_semester_marks.semester_marks_updated', '=', 'yes')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
@@ -39,7 +39,7 @@ class sanctionAmountController extends Controller {
                         ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                         ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
                         ->where('in_process_with', '=', 'issuer')
-                        ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
+                        ->whereRaw('scholarship_status.prev_amount_received_in_semester != scholarship_status.now_receiving_amount_for_semester')
                         ->where('be_semester_marks.semester_marks_updated', '=', 'yes')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
@@ -52,7 +52,7 @@ class sanctionAmountController extends Controller {
                         ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                         ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
                         ->where('in_process_with', '=', 'issuer')
-                        ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
+                        ->whereRaw('scholarship_status.prev_amount_received_in_semester != scholarship_status.now_receiving_amount_for_semester')
                         ->where('diploma_semester_marks.semester_marks_updated', '=', 'yes')
                         ->orderBy('registerusers.id', 'ASC')
                         ->get();
@@ -61,7 +61,7 @@ class sanctionAmountController extends Controller {
                         ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                         ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
                         ->where('in_process_with', '=', 'issuer')
-                        ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
+                        ->whereRaw('scholarship_status.prev_amount_received_in_semester != scholarship_status.now_receiving_amount_for_semester')
                         ->where('be_semester_marks.semester_marks_updated', '=', 'yes')
                         ->orderBy('registerusers.id', 'ASC')
                         ->get();
@@ -76,6 +76,13 @@ class sanctionAmountController extends Controller {
 
                     $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
                     $amount = ($row->now_receiving_amount_for_semester - $row->prev_amount_received_in_semester) * 4000;
+                    $multiplier = 12.5;
+                    if ($row->college == 'gpp' || $row->college == 'gpa') {
+                        $multiplier = 16.6;
+                    }
+
+                    $pre = $row->prev_amount_received_in_semester * $multiplier;
+                    $now = ($row->now_receiving_amount_for_semester * $multiplier) - $pre;
 
                     $output .= '
                     <tr id=\"' . $row->id . '\">
@@ -83,7 +90,10 @@ class sanctionAmountController extends Controller {
                     <td>' . $fullName . '</td>
                     <td>' . $row->college . '</td>
                     <td>' . $row->contact . "</td>
-                    <td contenteditable='true'>" . $row->now_receiving_amount_for_semester . "</td>
+                    <td><div class=\"progress\" style=\"height: 30px;\">
+                      <div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width:" . $pre . "%\" aria-valuenow=\"\" aria-valuemin=\"0\" aria-valuemax=\"100\">" . $row->prev_amount_received_in_semester . "</div>
+                      <div class=\"progress-bar \" role=\"progressbar\" style=\"width:" . $now . "%\" aria-valuenow=\"\" aria-valuemin=\"0\" aria-valuemax=\"100\">" . $row->now_receiving_amount_for_semester . "</div>
+                    </div></td>                    
                     <td contenteditable='true'>" . $amount . "</td>
                     <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Sanction Amount</a> </td>
                     </tr>
@@ -107,8 +117,72 @@ class sanctionAmountController extends Controller {
     }
 
     // Sanction remaining all application 
-    public function sanction() {
-        
+    public function sanctionAll() {
+
+        $data1 = DB::table('registerusers')
+                ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
+                ->join('diploma_semester_marks', 'registerusers.id', '=', 'diploma_semester_marks.id')
+                ->where('in_process_with', '=', 'issuer')
+                ->whereRaw('scholarship_status.prev_amount_received_in_semester != scholarship_status.now_receiving_amount_for_semester')
+                ->where('diploma_semester_marks.semester_marks_updated', '=', 'yes')
+                ->orderBy('registerusers.id', 'ASC')
+                ->get();
+
+        $data2 = DB::table('registerusers')
+                ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
+                ->join('be_semester_marks', 'registerusers.id', '=', 'be_semester_marks.id')
+                ->where('in_process_with', '=', 'issuer')
+                ->whereRaw('scholarship_status.prev_amount_received_in_semester != scholarship_status.now_receiving_amount_for_semester')
+                ->where('be_semester_marks.semester_marks_updated', '=', 'yes')
+                ->orderBy('registerusers.id', 'ASC')
+                ->get();
+
+        $data = $data1->merge($data2);
+        $total_row = $data->count();
+
+        try {
+            DB::beginTransaction();
+            if ($total_row > 0) {
+                foreach ($data as $row) {
+                    $studentID = $row->id;
+                    $amount = ($row->now_receiving_amount_for_semester - $row->prev_amount_received_in_semester) * 4000;
+
+                    DB::table('amount_sanctioned_by_issuer')->insert(
+                            ['id' => $studentID, "created_at" => Carbon::now(), "updated_at" => now(),
+                                'receiving_amount_for_semester' => $row->now_receiving_amount_for_semester, 'amount' => $amount]
+                    );
+
+                    // Delete Student if its scholarship peroid is over 
+                    if (intval($row->now_receiving_amount_for_semester == 8)) {
+                        DB::table('scholarship_status')->where('id', '=', $studentID)->delete();
+                        DB::table('scholarship_tenure')->insert(
+                                ['id' => $studentID, 'created_at' => Carbon::now(), 'updated_at' => now()]
+                        );
+                    }
+
+                    if ($row->college == 'gpp' || $row->college == 'gpa') {
+                        if (intval($row->now_receiving_amount_for_semester == 6)) {
+                            DB::table('scholarship_status')->where('id', '=', $studentID)->delete();
+                            DB::table('scholarship_tenure')->insert(
+                                    ['id' => $studentID, 'created_at' => Carbon::now(), 'updated_at' => now()]
+                            );
+                        }
+                    }
+
+                    DB::table('scholarship_status')
+                            ->where('id', $studentID)
+                            ->update(['in_process_with' => 'accountant']);
+
+                    DB::commit();
+                }
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            return redirect(route('admin.home'))->withErrors('message', 'Something went wrong. Please contact Dev. Error code:SanctionApplicationsController');
+        }
+
+        return redirect(route('admin.home'))->with('message', 'Successfully Sanctioned all application');
     }
 
     public function edit(ScholarshipStatus $ScholarshipStatus) {
@@ -132,8 +206,9 @@ class sanctionAmountController extends Controller {
                 );
 
                 $sem = DB::table('scholarship_status')
+                        ->join('registerusers', 'registerusers.id', '=', 'scholarship_status.id')
                         ->where('id', '=', $studentID)
-                        ->select('now_receiving_amount_for_semester')
+                        ->select('scholarship_status.now_receiving_amount_for_semester', 'registerusers.college')
                         ->first();
 
                 // Delete Student if its scholarship peroid is over 
@@ -143,6 +218,16 @@ class sanctionAmountController extends Controller {
                             ['id' => $studentID, 'created_at' => Carbon::now(), 'updated_at' => now()]
                     );
                 }
+
+                if ($sem->college == 'gpp' || $sem->college == 'gpa') {
+                    if (intval($sem->now_receiving_amount_for_semester == 6)) {
+                        DB::table('scholarship_status')->where('id', '=', $studentID)->delete();
+                        DB::table('scholarship_tenure')->insert(
+                                ['id' => $studentID, 'created_at' => Carbon::now(), 'updated_at' => now()]
+                        );
+                    }
+                }
+
                 DB::table('scholarship_status')
                         ->where('id', $studentID)
                         ->update(['in_process_with' => 'accountant']);
@@ -203,12 +288,13 @@ class sanctionAmountController extends Controller {
         $data = DB::table('registerusers')
                 ->join('scholarship_status', 'registerusers.id', '=', 'scholarship_status.id')
                 ->where('scholarship_status.in_process_with', '=', 'issuer')
-                ->whereRaw('prev_amount_received_in_semester != now_receiving_amount_for_semester')
+                ->whereRaw('scholarship_status.prev_amount_received_in_semester != scholarship_status.now_receiving_amount_for_semester')
                 ->orderBy('registerusers.id', 'desc')
                 ->select('registerusers.id', 'registerusers.yearOfAdmission', 'college', 'directSY')
                 ->get();
 
         $total_row = $data->count();
+
         if ($total_row > 0) {
             foreach ($data as $info) {
                 $forSemester = $this->checkSemester($info);

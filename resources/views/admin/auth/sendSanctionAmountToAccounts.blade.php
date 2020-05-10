@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header" >{{ ucfirst(config('auth.prefix')) }}: You have <span id="total_records"></span> students to sanction scholarship amount</div>
 
@@ -12,16 +12,16 @@
                     <input type="text" name="search" id="search" class="form-control" placeholder="Search Student"/>
                 </div>
 
-                <div id='tableID'>
-                    <table class="table table-hover" id='mytableID'>
+                <div id='tableID' align='center'>
+                    <table class="table table-hover table-responsive"  id='mytableID'>
                         <thead class="thead-light">
                             <tr>
-                                <th>Form ID</th>
+                                <th>ID</th>
                                 <th>Name</th>
                                 <th>College</th>
                                 <th>Contact</th>
-                                <th>For Sem</th>
-                                <th>Amount</th>
+                                <th style="width:  35%">Status</th>
+                                <th>Amount (INR)</th>
                                 <th>Accept</th>
                             </tr>
                         </thead>
@@ -31,9 +31,8 @@
                     </table>
                 </div>
 
-
                 <div class="form-group row mb-0">
-                    <div class="col-md-6 offset-md-8">
+                    <div class="offset-md-9">
                         <a href="{{ route('sanctionAllApplications') }}" class="btn btn-primary success">Sanction All Applications</a>
                         <a href="javascript:history.back()" class="btn btn-primary">Back</a>
                     </div>
