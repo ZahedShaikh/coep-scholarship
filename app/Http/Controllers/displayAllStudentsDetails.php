@@ -77,9 +77,7 @@ class displayAllStudentsDetails extends Controller {
                 'total_data' => $total_row,
                 'export_data' => $export_data->toArray()
             );
-
-            error_log(print_r($data, true));
-
+            //error_log(print_r($data, true));
             echo json_encode($data);
         }
     }

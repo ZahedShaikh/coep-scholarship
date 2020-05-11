@@ -26,18 +26,18 @@ class accountantController extends Controller {
                         ->join('bank_details', 'registerusers.id', '=', 'bank_details.id')
                         ->where('registerusers.id', 'LIKE', '%' . $query . '%')
                         ->orWhere('registerusers.name', 'LIKE', '%' . $query . '%')
-//                        ->select('registerusers.id', 'registerusers.name', 'registerusers.middleName', 'registerusers.surName', 'registerusers.contact', 'registerusers.college',
-//                                'bank_details.bank_Name', 'bank_details.IFSC_Code', 'bank_details.account_No', 'bank_details.branch',
-//                                'amount_sanctioned_by_issuer.amount', 'amount_sanctioned_by_issuer.now_receiving_amount_for_semester')
+                        ->select('registerusers.id', 'registerusers.name', 'registerusers.middleName', 'registerusers.surName', 'registerusers.contact', 'registerusers.college',
+                                'bank_details.bank_Name', 'bank_details.IFSC_Code', 'bank_details.account_No', 'bank_details.branch',
+                                'amount_sanctioned_by_issuer.amount', 'amount_sanctioned_by_issuer.now_receiving_amount_for_semester')
                         ->orderBy('registerusers.college', 'ASC')
                         ->get();
             } else {
                 $data = DB::table('registerusers')
                         ->join('amount_sanctioned_by_issuer', 'registerusers.id', '=', 'amount_sanctioned_by_issuer.id')
                         ->join('bank_details', 'registerusers.id', '=', 'bank_details.id')
-//                        ->select('registerusers.id', 'registerusers.name', 'registerusers.middleName', 'registerusers.surName', 'registerusers.contact', 'registerusers.college',
-//                                'bank_details.bank_Name', 'bank_details.IFSC_Code', 'bank_details.account_No', 'bank_details.branch',
-//                                'amount_sanctioned_by_issuer.amount', 'amount_sanctioned_by_issuer.receiving_amount_for_semester')
+                        ->select('registerusers.id', 'registerusers.name', 'registerusers.middleName', 'registerusers.surName', 'registerusers.contact', 'registerusers.college',
+                                'bank_details.bank_Name', 'bank_details.IFSC_Code', 'bank_details.account_No', 'bank_details.branch',
+                                'amount_sanctioned_by_issuer.amount', 'amount_sanctioned_by_issuer.receiving_amount_for_semester')
                         ->orderBy('registerusers.college', 'ASC')
                         ->get();
             }
@@ -46,18 +46,45 @@ class accountantController extends Controller {
 
             if ($total_row > 0) {
                 foreach ($data as $row) {
+                    
                     $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
+                    $prev_amount_received_in_semester = $row->receiving_amount_for_semester - ($row->amount / 4000);
+                    $multiplier = 12.5;
+                    if ($row->college == 'gpp' || $row->college == 'gpa') {
+                        $multiplier = 16.6;
+                    }
+
+                    $pre = $prev_amount_received_in_semester * $multiplier;
+                    $now = ($row->receiving_amount_for_semester * $multiplier) - $pre;
+
                     $output .= '
                     <tr id=\"' . $row->id . '\">
                     <td align=\'center\'>' . $row->id . '</td>
                     <td>' . $fullName . '</td>
                     <td>' . $row->college . '</td>
-                    <td>' . $row->contact . '</td>
-                    <td>' . $row->receiving_amount_for_semester . '</td>
-                    <td>' . $row->amount . "</td>
+                    <td>' . $row->contact . "</td>
+                    <td><div class=\"progress\" style=\"height: 30px;\">
+                      <div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width:" . $pre . "%\" aria-valuenow=\"\" aria-valuemin=\"0\" aria-valuemax=\"100\">" . $prev_amount_received_in_semester . "</div>
+                      <div class=\"progress-bar \" role=\"progressbar\" style=\"width:" . $now . "%\" aria-valuenow=\"\" aria-valuemin=\"0\" aria-valuemax=\"100\">" . $row->receiving_amount_for_semester . "</div>
+                    </div></td>
+                    <td contenteditable='true'>" . $row->amount . "</td>
                     <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Sanction Amount</a> </td>
                     </tr>
                     ";
+                    
+//                    
+//                    $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
+//                    $output .= '
+//                    <tr id=\"' . $row->id . '\">
+//                    <td align=\'center\'>' . $row->id . '</td>
+//                    <td>' . $fullName . '</td>
+//                    <td>' . $row->college . '</td>
+//                    <td>' . $row->contact . '</td>
+//                    <td>' . $row->receiving_amount_for_semester . '</td>
+//                    <td>' . $row->amount . "</td>
+//                    <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Sanction Amount</a> </td>
+//                    </tr>
+//                    ";
                 }
             } else {
                 $output = '
@@ -69,7 +96,8 @@ class accountantController extends Controller {
 
             $data = array(
                 'table_data' => $output,
-                'total_data' => $total_row
+                'total_data' => $total_row,
+                'export_data' => $data->toArray()
             );
 
             echo json_encode($data);
