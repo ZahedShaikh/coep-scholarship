@@ -45,7 +45,6 @@ class displayAllStudentsDetails extends Controller {
             $export_data = $data_BE->merge($data_DE);
             $total_row = $export_data->count();
 
-//<td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Show</a> </td>
             if ($total_row > 0) {
                 foreach ($export_data as $row) {
                     $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
@@ -69,9 +68,9 @@ class displayAllStudentsDetails extends Controller {
             </tr>
             ';
             }
-            
+
             error_log($output);
-            
+
             $data = array(
                 'table_data' => $output,
                 'total_data' => $total_row,
