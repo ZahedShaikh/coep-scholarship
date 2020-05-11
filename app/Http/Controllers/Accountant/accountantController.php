@@ -16,7 +16,6 @@ class accountantController extends Controller {
     public function show(Request $request) {
 
         if ($request->ajax()) {
-
             $output = '';
             $query = $request->get('query');
 
@@ -46,7 +45,7 @@ class accountantController extends Controller {
 
             if ($total_row > 0) {
                 foreach ($data as $row) {
-                    
+
                     $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
                     $prev_amount_received_in_semester = $row->receiving_amount_for_semester - ($row->amount / 4000);
                     $multiplier = 12.5;
@@ -71,7 +70,7 @@ class accountantController extends Controller {
                     <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Sanction Amount</a> </td>
                     </tr>
                     ";
-                    
+
 //                    
 //                    $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
 //                    $output .= '
@@ -163,8 +162,4 @@ class accountantController extends Controller {
      * @param  \App\ScholarshipStatus  $ScholarshipStatus
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ScholarshipStatus $ScholarshipStatus) {
-        //
-    }
-
 }
