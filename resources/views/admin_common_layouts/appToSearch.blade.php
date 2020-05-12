@@ -33,7 +33,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/accountant/home') }}">
+                <a class="navbar-brand" href="{{ url('/admin') }}">
                     TATA Samarth Scholarship
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -49,31 +49,63 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        @guest('accountant')
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/accountant/home') }}">{{ ucfirst(config('auth.prefix')) }} Login</a>
-                        </li>
-                        @else
+
                         <li class="nav-item dropdown">
+
+
+                            @if(auth('admin')->user())
+
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                {{ auth('admin')->user()->name }} <span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <!-- 
+                                <a class="dropdown-item" href="{{ route('admin.password.reset') }}">Change Password</a>
+                                !-->
+                                <a class="dropdown-item" href="{{ route('admin.register') }}">Add New Admin</a>
+                                <a class="dropdown-item" href="{{ route('accountant.register') }}">Add New Accountant</a>
+                                <a class="dropdown-item" href="{{ route('vendor.register') }}">Add New Vendor</a>
+
+                                <a class="dropdown-item" href="/admin/logout" onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+                                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
+
+                            @elseif (auth('accountant')->user())
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 {{ auth('accountant')->user()->name }} <span class="caret"></span>
                             </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/accountant/logout" onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+                                <form id="logout-form" action="{{ route('accountant.logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
 
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{{ url('/accountant/logout') }}"
-                                       onclick="event.preventDefault();
-                                               document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
+                            @elseif(auth('vendor')->user())
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                {{ auth('vendor')->user()->name }} <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/vendor/logout" onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+                                <form id="logout-form" action="{{ route('vendor.logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
+                            @endif
 
-                                    <form id="logout-form" action="{{ url('/accountant/logout') }}" method="POST" style="display: none;">
-                                        {{ csrf_field() }}
-                                    </form>
-                                </li>
-                            </ul>
                         </li>
-                        @endguest
                     </ul>
                 </div>
             </div>

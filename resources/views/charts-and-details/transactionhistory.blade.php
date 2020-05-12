@@ -1,4 +1,4 @@
-@extends('admin.layout.appToSearch')
+@extends('admin_common_layouts.appToSearch')
 @section('content')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
