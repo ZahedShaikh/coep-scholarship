@@ -22,9 +22,6 @@ Route::post('/myuserupdate', 'userupdateController@update')->name('myuserupdate'
 Route::get('/profileprint', 'ProfilePrintController@show')->name('profileprint');
 
 
-
-
-
 /*  Admin Page
  */
 
@@ -52,6 +49,9 @@ Route::get('/creditEveryoneAmountToBank', 'Accountant\accountantController@sanct
 Route::get('/getAllStudentsDetails', 'displayAllStudentsDetails@index')->name('getAllStudentsDetails');
 Route::get('/showAllStudentsDetails', 'displayAllStudentsDetails@show')->name('showAllStudentsDetails');
 Route::get('transactionShow/{id}', 'displayAllStudentsDetails@transactionShow')->name('transactionShow');
+
+Route::get('/transactionHistory', 'transactionhistoryController@index')->name('transactionHistory');
+Route::get('/showHistory', 'transactionhistoryController@showHistory')->name('showHistory');
 
 Route::get('/charts', 'Charts@index')->name('charts');
 Route::get('/updateCharts', 'Charts@update')->name('updateCharts');

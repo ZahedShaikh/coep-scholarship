@@ -4,6 +4,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
+<script src="{{ asset('/js/bootstrap-datepicker.min.js') }}" defer></script>
+<link href="{{ asset('/css/bootstrap-datepicker3.min.css') }}" rel="stylesheet">
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -12,16 +15,39 @@
                 <br>
 
                 <div class="form-row">
+
                     <div class="form-group col-md-2">
                         <label class="font-weight-bold" for="from">From</label>
-                        <select id="from" name="category" class="form-control">
-                        </select>
+                        <div class="input-group date" data-provide="datepicker">
+                            <input id="from" name="from" type="text" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="form-group col-md-2">
-                        <label class="font-weight-bold" for="to">To</label>
-                        <select id="to" name="category" class="form-control">
-                        </select>
+                        <label class="font-weight-bold" for="to">to</label>
+                        <div class="input-group date" data-provide="datepicker">
+                            <input id="to" name="to" type="text" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold">Get Transaction</label>
+                        <button type="submit" id="getTrans" class="btn btn-primary">
+                            {{ __('Get Transaction') }}
+                        </button>
+                    </div>
+
+
+                    <div class="form-group col-md-1">
+
+                    </div>
+
 
                     <div class="form-group col-md-3">
                         <label class="font-weight-bold" for="select-college">Select College</label>
@@ -31,24 +57,6 @@
                             <option value="gcoek" selected="">Government College of Engineering Karad</option><!-- B.Tech !-->
                             <option value="gpp" selected="">Government Polytechnic Pune</option>    <!-- Diploma !-->
                             <option value="gpa" selected="">Government Polytechnic Awasari</option> <!-- Diploma !-->
-                        </select>
-                    </div>
-
-                    <div class="form-group col-md-3">
-                        <label class="font-weight-bold" for="select-category">Select Category</label>
-                        <select class="selectpicker" id="select-category" multiple data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true">
-                            <option value="OPEN" selected="">Open</option>
-                            <option value="OBC" selected="">OBC</option>
-                            <option value="EWS" selected="">EWS</option>
-                            <option value="SC" selected="">SC</option>
-                            <option value="ST" selected="">ST</option>
-                            <option value="SBC" selected="">SBC</option>
-                            <option value="VJ" selected="">VJ</option>
-                            <option value="NT-1" selected="">NT-1</option>
-                            <option value="NT-2" selected="">NT-2</option>
-                            <option value="NT-3" selected="">NT-3</option>
-                            <option value="ECBC" selected="">ECBC</option>
-                            <option value="OTHER" selected="">Other</option>
                         </select>
                     </div>
 
@@ -66,16 +74,13 @@
                 <div id='tableID'>
                     <table class="table table-hover" id='mytableID'>
                         <thead class="thead-light">
-                            <tr>
-                                <th>Form ID</th>
-                                <th>Name</th>
+                            <tr><th>T.ID</th>
+                                <th>Full Name</th>
                                 <th>College</th>
-                                <th>Direct-S year</th>
-                                <th>Category</th>
-                                <th>Gender</th>
-                                <th>Current-Year</th>
                                 <th>Contact</th>
-                                <th>Transaction History</th>
+                                <th>Amount Received for Year</th>
+                                <th>Transaction date</th>
+                                <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,7 +90,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <div class="col-md-10 offset-md-1">
+                    <div class="offset-md-11">
                         <a href="javascript:history.back()" class="btn btn-primary float-right">Back</a>
                     </div>
                 </div>
@@ -106,24 +111,47 @@
     $(document).ready(function () {
 
         //  Dynamic selection of college
-        $("#select-college, #select-category").change(function () {
+        $("#select-college").change(function () {
             var selectedCollege = $("#select-college").val();
-            var selectedCategory = $("#select-category").val();
-            functionCollege(selectedCollege, selectedCategory);
+            functionCollege(selectedCollege);
         });
-
-        var currentYear = (new Date).getFullYear();
-        var option = '';
-        for (var i = 2015; i <= currentYear; i++) {
-            option += '<option value="' + i + '">' + i + '</option>';
+        function functionCollege(selectedCollege) {
+            var filter, table, tr, td, i, j, txtValue;
+            table = document.getElementById("tableID");
+            tr = table.getElementsByTagName("tr");
+            var FLG = true;
+            if (typeof selectedCollege !== 'undefined' && selectedCollege.length > 0) {
+                for (i = 1; i < tr.length; i++) {
+                    FLG = true;
+                    td = tr[i].getElementsByTagName("td")[2];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        for (j = 0; j < selectedCollege.length; j++) {
+                            filter = selectedCollege[j].toUpperCase();
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                                FLG = false;
+                                break;
+                            }
+                        }
+                        if (FLG) {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            } else {
+                for (i = 1; i < tr.length; i++) {
+                    tr[i].style.display = "";
+                }
+            }
         }
-        $('#from').append(option);
-        $('#to').append(option);
-        $("#from").val(currentYear - 1);
-        $("#to").val(currentYear);
-        // Call for defualt current and erlier year
-        fetch_customer_data(currentYear - 1, currentYear);
 
+        var today = new Date;
+        var currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        $("#from").val(currentDate);
+        $("#to").val(currentDate);
+        // Call for defualt current and erlier year
+        fetch_customer_data(currentDate, currentDate);
         // Call for givan year
         var myData;
         function fetch_customer_data(from, to)
@@ -133,9 +161,8 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
             $.ajax({
-                url: "{{ route('showAllStudentsDetails') }}",
+                url: "{{ route('showHistory') }}",
                 method: "GET",
                 contentType: "application/json; charset=utf-8",
                 data: {from: from, to: to},
@@ -145,11 +172,10 @@
                     $('tbody').html(data.table_data);
                     $('#total_records').text(data.total_data);
                     myData = data.export_data;
-
                     // check for other filter values as well
                     var selectedCollege = $("#select-college").val();
-                    var selectedCategory = $("#select-category").val();
-                    functionCollege(selectedCollege, selectedCategory);
+                    functionCollege(selectedCollege);
+
                 },
                 error: function (data) {
                     console.log(data.status + " " + data.statusText);
@@ -160,16 +186,10 @@
         $("#btn_export").click(function (e) {
             var myFilteredData = [];
             var selectedCollege = $("#select-college").val();
-            var selectedCategory = $("#select-category").val();
-
             for (var j = 0; j < myData.length; j++) {
                 for (var p = 0; p < selectedCollege.length; p++) {
                     if ((myData[j])['college'] === selectedCollege[p]) {
-                        for (var q = 0; q < selectedCategory.length; q++) {
-                            if ((myData[j])['category'] === selectedCategory[q]) {
-                                myFilteredData.push(myData[j]);
-                            }
-                        }
+                        myFilteredData.push(myData[j]);
                     }
                 }
             }
@@ -181,71 +201,20 @@
         });
 
 
-        $('#from, #to').change(function () {
+
+        $("#getTrans").click(function (e) {
             var from = $('#from').val();
             var to = $('#to').val();
-            //console.log(from + " " + to);
-            if (from > to) {
-                alert('Enter correct year');
-                $('#to').val(from);
-            } else {
-                fetch_customer_data(from, to);
-            }
+            fetch_customer_data(from, to);
         });
+
 
         (function ($) {
             $.fn.assign = function (msg) {
                 assignScholarshipFunction(msg);
             };
         })(jQuery);
-
-    });
-
-    function functionCollege(selectedCollege, selectedCategory) {
-
-        var filter, table, tr, td, i, txtValue, j, k, tdCategory, txtValueCategory;
-        table = document.getElementById("tableID");
-        tr = table.getElementsByTagName("tr");
-
-        var flg = false;
-        var flg2 = true;
-        for (i = 1; i < tr.length; i++) {
-            flg = false;
-            flg2 = true;
-
-            td = tr[i].getElementsByTagName("td")[2];
-
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                for (j = 0; j < selectedCollege.length; j++) {
-                    filter = selectedCollege[j].toUpperCase();
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        flg = true;
-                        break;
-                    }
-                }
-            }
-
-            tdCategory = tr[i].getElementsByTagName("td")[4];
-            if (flg) {
-                if (tdCategory) {
-                    txtValueCategory = tdCategory.textContent || tdCategory.innerText;
-                    for (k = 0; k < selectedCategory.length; k++) {
-                        filter = selectedCategory[k].toUpperCase();
-                        if (txtValueCategory.toUpperCase().indexOf(filter) > -1) {
-                            tr[i].style.display = "";
-                            flg2 = false;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (flg2) {
-                tr[i].style.display = "none";
-            }
-        }
-    }
-</script>
+    });</script>
 
 
 <script>

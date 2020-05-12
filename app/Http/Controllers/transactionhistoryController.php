@@ -2,111 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use App\transaction_history;
 use Illuminate\Http\Request;
-
-use App\registeruser;
 use Illuminate\Support\Facades\DB;
 
 class transactionhistoryController extends Controller {
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index() {
-        //
+        return view('charts-and-details.transactionhistory');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create() {
-        //
-    }
+    public function showHistory(Request $request) {
+        if ($request->ajax()) {
+            $output = '';
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request) {
-        //
-    }
+            $from = $request->get('from');
+            $to = $request->get('to');
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\transaction_history  $transaction_history
-     * @return \Illuminate\Http\Response
-     */
-    public function show(transaction_history $transaction_history) {
-        //
-    }
+            $export_data = DB::table('transaction_history')
+                    ->join('registerusers', 'transaction_history.id', '=', 'registerusers.id')
+                    ->Where('dateOfTransaction', '>=', date('' . $from . ''))
+                    ->Where('dateOfTransaction', '<=', date('' . $to . ''))
+                    ->select('registerusers.id', 'name', 'middleName', 'surName', 'category', 'gender', 'yearOfAdmission', 'contact', 'college', 'collegeEnrollmentNo', 'directSY',
+                            'transaction_history.transactionId', 'dateOfTransaction', 'amount', 'amountReceivedForYear', 'transaction_history.created_at')
+                    ->orderBy('transaction_history.transactionId', 'DESC')
+                    ->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\transaction_history  $transaction_history
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(transaction_history $transaction_history) {
-        return view('admin.auth.amountDistribution');
-    }
+            $total_row = $export_data->count();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\transaction_history  $transaction_history
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, transaction_history $transaction_history) {
+            if ($total_row > 0) {
+                foreach ($export_data as $row) {
+                    $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
+                    $output .= '
+                    <tr id=\"' . $row->transactionId . '\">
+                    <td align=\'center\'>' . $row->transactionId . '</td>
+                    <td>' . $fullName . '</td>
+                    <td>' . $row->college . '</td>
+                    <td>' . $row->contact . '</td>
+                    <td>' . $row->amountReceivedForYear . '</td>
+                    <td>' . $row->dateOfTransaction . '</td>
+                    <td>' . $row->amount . "</td>
+                    </tr>";
+                }
+            } else {
+                $output = '
+            <tr>
+            <td align="center" colspan="7">No Data Found</td>
+            </tr>
+            ';
+            }
 
-        #$transaction_history = new transaction_history();
-        // Cleaning up data to be human error free!
-        $student_list1 = $request->input('student_list1');
-        $amount1 = $request->input('amount1');
-        $student_list1 = str_replace(' ', '', $student_list1);
-        $amount1 = str_replace(' ', '', $amount1);
+            $data = array(
+                'table_data' => $output,
+                'total_data' => $total_row,
+                'export_data' => $export_data->toArray()
+            );
 
-        if ((int) $amount1 == 0) {
-            return redirect(route('getamountDistro'))->with('message', 'Please enter Amount');
+            echo json_encode($data);
         }
-        
-        
-        $users = DB::table('registerusers')->where('id', $student_list1)->first();
-        if($users == null){
-            return redirect(route('getamountDistro'))->with('message', 'ID not found! Please check');
-        }
-        
-        
-        $transaction_history->id = $student_list1;
-        $transaction_history->amount = (double) $amount1;
-
-        try {
-            $transaction_history->save();
-        } catch (\Illuminate\Database\QueryException $exc) {
-            print($exc);
-            dd($exc);
-            return redirect(route('getamountDistro'))->with('message', 'Something went wrong');
-        }
-
-        return redirect(route('getamountDistro'))->with('message', 'Success');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\transaction_history  $transaction_history
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(transaction_history $transaction_history) {
-        //
     }
 
 }
