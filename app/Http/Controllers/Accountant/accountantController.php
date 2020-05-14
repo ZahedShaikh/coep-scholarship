@@ -103,63 +103,60 @@ class accountantController extends Controller {
         }
     }
 
-    // Sanction remaining all application 
-    public function sanction() {
-        
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ScholarshipStatus  $ScholarshipStatus
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ScholarshipStatus $ScholarshipStatus) {
-        //
-    }
-
     public function send(Request $request) {
-
         if ($request->ajax()) {
             $studentID = $request->get('query');
-            try {
-                DB::beginTransaction();
-
-                $temp = DB::table('amount_sanctioned_by_issuer')
-                        ->where('id', '=', $studentID)
-                        ->first();
-
-                DB::table('scholarship_status')
-                        ->where('id', $studentID)
-                        ->update(['in_process_with' => 'issuer',
-                            'prev_amount_received_in_semester' => $temp->receiving_amount_for_semester]);
-
-                DB::table('transaction_history')->insert(
-                        ['id' => $studentID,
-                            'dateOfTransaction' => now(),
-                            'amount' => $temp->amount,
-                            'amountReceivedForYear' => ceil($temp->receiving_amount_for_semester / 2),
-                            'amountReceivedForSemester' => $temp->receiving_amount_for_semester,
-                            'year' => date("Y"),
-                            'created_at' => Carbon::now(),
-                            'updated_at' => now()]
-                );
-
-                DB::table('amount_sanctioned_by_issuer')->where('id', '=', $studentID)->delete();
-                DB::commit();
-            } catch (\Exception $e) {
-                DB::rollback();
-                dd('Something went wrong - admin.auth.accountcontroller@send', $e);
-            }
-
+            $this->functionSaction($studentID);
             echo json_encode(true);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\ScholarshipStatus  $ScholarshipStatus
-     * @return \Illuminate\Http\Response
-     */
+    // Sanction remaining all application 
+    public function sanction(Request $request) {
+        try {
+            if ($request->ajax()) {
+                $ids = $request->input('SanctionAlldataIds');
+                foreach ($ids as $studentID) {
+                    $this->functionSaction($studentID);
+                }
+            }
+            echo json_encode(true);
+        } catch (\Exception $e) {
+            error . log('Error for sanction all', $e);
+            echo json_encode(false);
+        }
+    }
+
+    public function functionSaction($studentID) {
+        try {
+            DB::beginTransaction();
+
+            $temp = DB::table('amount_sanctioned_by_issuer')
+                    ->where('id', '=', $studentID)
+                    ->first();
+
+            DB::table('scholarship_status')
+                    ->where('id', $studentID)
+                    ->update(['in_process_with' => 'issuer',
+                        'prev_amount_received_in_semester' => $temp->receiving_amount_for_semester]);
+
+            DB::table('transaction_history')->insert(
+                    ['id' => $studentID,
+                        'dateOfTransaction' => now(),
+                        'amount' => $temp->amount,
+                        'amountReceivedForYear' => ceil($temp->receiving_amount_for_semester / 2),
+                        'amountReceivedForSemester' => $temp->receiving_amount_for_semester,
+                        'year' => date("Y"),
+                        'created_at' => Carbon::now(),
+                        'updated_at' => now()]
+            );
+
+            DB::table('amount_sanctioned_by_issuer')->where('id', '=', $studentID)->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd('Something went wrong - admin.auth.accountcontroller@send', $e);
+        }
+    }
+
 }

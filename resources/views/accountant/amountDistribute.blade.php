@@ -64,7 +64,12 @@
 
                 <div class="form-group row mb-0">
                     <div class="offset-md-8">
-                        <a href="{{ route('sanctionAllApplications') }}" class="btn btn-primary success">Sanction Remaining All Applications</a>
+
+
+                        <button type="submit" id="sanctionAll" class="btn btn-primary">
+                            {{ __('Sanction Remaining All Applications') }}
+                        </button>
+
                         <a href="javascript:history.back()" class="btn btn-primary">Back</a>
 
                     </div>
@@ -224,7 +229,7 @@
 
 
         $("#btn_export").click(function (e) {
-            
+
 //            var myFilteredData = [];
 //            var selectedCollege = $("#select-college").val();
 //            var selectedCategory = $("#select-category").val();
@@ -282,6 +287,52 @@
                 }
             });
         }
+
+        $("#sanctionAll").click(function (e) {
+            //console.log('okay presssed'); 
+            var table = document.getElementById("tableID");
+            var tr = table.getElementsByTagName("tr");
+            var SanctionAlldataIds = [];
+            var i, td, txtValue;
+
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    SanctionAlldataIds.push(txtValue);
+                }
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+//            
+//            $.ajax("sanctionAllApplications", {
+//                type: 'GET',
+//                data: {SanctionAlldataIds: SanctionAlldataIds}
+//            });
+//            
+
+            $.ajax({
+                url: "{{ route('creditEveryoneAmountToBank') }}",
+                method: "GET",
+                contentType: "application/json; charset=utf-8",
+                data: {SanctionAlldataIds: SanctionAlldataIds},
+                dataType: "json",
+                success: function ()
+                {
+                    location.reload(true);
+                },
+                error: function (data) {
+                    console.log(data.status + " " + data.statusText);
+                }
+            });
+
+
+
+        });
 
         (function ($) {
 
