@@ -252,7 +252,7 @@
 
         (function ($) {
             $.fn.assign = function (msg) {
-                console.log(msg);
+                //console.log(msg);
                 var currentRow = $(this).closest("tr");
                 var amount = currentRow.find("td:eq(5)").text();
                 var for_Sem = currentRow.find("td:eq(4)").text();

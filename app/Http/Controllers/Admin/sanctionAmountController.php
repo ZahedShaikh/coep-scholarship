@@ -193,9 +193,9 @@ class sanctionAmountController extends Controller {
 
         if ($request->ajax()) {
 
-            $studentID = $request->get('query_id');
-            $receiving_amount_for_semester = $request->get('query_for_Sem');
-            $amount = $request->get('query_amount');
+            $studentID = preg_replace("/[^0-9]/", "", $request->get('query_id'));
+            $receiving_amount_for_semester = preg_replace("/[^0-9]/", "", $request->get('query_for_Sem'));
+            $amount = preg_replace("/[^0-9]/", "", $request->get('query_amount'));
             $output = false;
 
             try {
@@ -207,7 +207,7 @@ class sanctionAmountController extends Controller {
 
                 $sem = DB::table('scholarship_status')
                         ->join('registerusers', 'registerusers.id', '=', 'scholarship_status.id')
-                        ->where('id', '=', $studentID)
+                        ->where('scholarship_status.id', '=', $studentID)
                         ->select('scholarship_status.now_receiving_amount_for_semester', 'registerusers.college')
                         ->first();
 
@@ -227,15 +227,16 @@ class sanctionAmountController extends Controller {
                         );
                     }
                 }
-
+                
                 DB::table('scholarship_status')
                         ->where('id', $studentID)
                         ->update(['in_process_with' => 'accountant']);
-
                 DB::commit();
+                
                 $output = true;
             } catch (\Exception $e) {
                 DB::rollback();
+                error_log($e);
                 dd('Some problem in Sanction amount controller\n', $e);
                 //return redirect(route('admin.auth.getSanctionAmount'))->with('message', 'Something went wrong');
             }
@@ -296,7 +297,7 @@ class sanctionAmountController extends Controller {
                 ->get();
 
         $total_row = $data->count();
-        
+
         if ($total_row > 0) {
             foreach ($data as $info) {
                 $forSemester = $this->checkSemester($info);
