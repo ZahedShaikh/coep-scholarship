@@ -194,22 +194,22 @@ class sanctionAmountController extends Controller {
         if ($request->ajax()) {
 
             $studentID = preg_replace("/[^0-9]/", "", $request->get('query_id'));
-            $receiving_amount_for_semester = preg_replace("/[^0-9]/", "", $request->get('query_for_Sem'));
             $amount = preg_replace("/[^0-9]/", "", $request->get('query_amount'));
             $output = false;
 
             try {
-                DB::beginTransaction();
-                DB::table('amount_sanctioned_by_issuer')->insert(
-                        ['id' => $studentID, "created_at" => Carbon::now(), "updated_at" => now(),
-                            'receiving_amount_for_semester' => $receiving_amount_for_semester, 'amount' => $amount]
-                );
 
                 $sem = DB::table('scholarship_status')
                         ->join('registerusers', 'registerusers.id', '=', 'scholarship_status.id')
                         ->where('scholarship_status.id', '=', $studentID)
                         ->select('scholarship_status.now_receiving_amount_for_semester', 'registerusers.college')
                         ->first();
+
+                DB::beginTransaction();
+                DB::table('amount_sanctioned_by_issuer')->insert(
+                        ['id' => $studentID, "created_at" => Carbon::now(), "updated_at" => now(),
+                            'receiving_amount_for_semester' => $sem->now_receiving_amount_for_semester, 'amount' => $amount]
+                );
 
                 // Delete Student if its scholarship peroid is over 
                 if (intval($sem->now_receiving_amount_for_semester == 8)) {
@@ -227,12 +227,12 @@ class sanctionAmountController extends Controller {
                         );
                     }
                 }
-                
+
                 DB::table('scholarship_status')
                         ->where('id', $studentID)
                         ->update(['in_process_with' => 'accountant']);
                 DB::commit();
-                
+
                 $output = true;
             } catch (\Exception $e) {
                 DB::rollback();

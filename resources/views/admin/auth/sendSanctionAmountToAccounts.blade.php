@@ -255,9 +255,8 @@
                 //console.log(msg);
                 var currentRow = $(this).closest("tr");
                 var amount = currentRow.find("td:eq(5)").text();
-                var for_Sem = currentRow.find("td:eq(4)").text();
-                //alert(for_Sem);
-                assignScholarshipFunction(msg, amount, for_Sem);
+                assignScholarshipFunction(msg, amount);
+                
             };
         })(jQuery);
     });
