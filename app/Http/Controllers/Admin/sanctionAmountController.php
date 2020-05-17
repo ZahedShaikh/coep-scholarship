@@ -75,7 +75,7 @@ class sanctionAmountController extends Controller {
                 foreach ($data as $row) {
 
                     $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
-                    $amount = ($row->now_receiving_amount_for_semester - $row->prev_amount_received_in_semester) * 4000;
+                    $amount = ($row->now_receiving_amount_for_semester - $row->prev_amount_received_in_semester) * 20000;
                     $multiplier = 12.5;
                     if ($row->college == 'gpp' || $row->college == 'gpa') {
                         $multiplier = 16.6;
