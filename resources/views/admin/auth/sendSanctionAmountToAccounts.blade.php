@@ -252,7 +252,6 @@
 
         (function ($) {
             $.fn.assign = function (msg) {
-                //console.log(msg);
                 var currentRow = $(this).closest("tr");
                 var amount = currentRow.find("td:eq(5)").text();
                 assignScholarshipFunction(msg, amount);

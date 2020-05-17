@@ -50,8 +50,10 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>College</th>
-                                <th>Contact</th>
-                                <th style="width:  35%">Status</th>
+                                <th style="width:  15%">Bank Name</th>
+                                <th style="width:  15%">Branch</th>
+                                <th>IFSC</th>
+                                <th>Account No</th>
                                 <th>Amount (INR)</th>
                                 <th>Accept</th>
                             </tr>

@@ -47,48 +47,25 @@ class accountantController extends Controller {
                 foreach ($data as $row) {
 
                     $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
-                    $prev_amount_received_in_semester = $row->receiving_amount_for_semester - ($row->amount / 4000);
-                    $multiplier = 12.5;
-                    if ($row->college == 'gpp' || $row->college == 'gpa') {
-                        $multiplier = 16.6;
-                    }
-
-                    $pre = $prev_amount_received_in_semester * $multiplier;
-                    $now = ($row->receiving_amount_for_semester * $multiplier) - $pre;
 
                     $output .= '
                     <tr id=\"' . $row->id . '\">
                     <td align=\'center\'>' . $row->id . '</td>
                     <td>' . $fullName . '</td>
                     <td>' . $row->college . '</td>
-                    <td>' . $row->contact . "</td>
-                    <td><div class=\"progress\" style=\"height: 30px;\">
-                      <div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width:" . $pre . "%\" aria-valuenow=\"\" aria-valuemin=\"0\" aria-valuemax=\"100\">" . $prev_amount_received_in_semester . "</div>
-                      <div class=\"progress-bar \" role=\"progressbar\" style=\"width:" . $now . "%\" aria-valuenow=\"\" aria-valuemin=\"0\" aria-valuemax=\"100\">" . $row->receiving_amount_for_semester . "</div>
-                    </div></td>
+                    <td>' . $row->bank_Name . '</td>
+                    <td>' . $row->branch . '</td>
+                    <td>' . $row->IFSC_Code . '</td>
+                    <td>' . $row->account_No . "</td>
                     <td contenteditable='true'>" . $row->amount . "</td>
                     <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Sanction Amount</a> </td>
                     </tr>
                     ";
-
-//                    
-//                    $fullName = $row->name . " " . $row->middleName . " " . $row->surName;
-//                    $output .= '
-//                    <tr id=\"' . $row->id . '\">
-//                    <td align=\'center\'>' . $row->id . '</td>
-//                    <td>' . $fullName . '</td>
-//                    <td>' . $row->college . '</td>
-//                    <td>' . $row->contact . '</td>
-//                    <td>' . $row->receiving_amount_for_semester . '</td>
-//                    <td>' . $row->amount . "</td>
-//                    <td> <a onclick=\"$(this).assign('$row->id')\" class=\"btn btn-primary align-content-md-center\">Sanction Amount</a> </td>
-//                    </tr>
-//                    ";
                 }
             } else {
                 $output = '
             <tr>
-            <td align="center" colspan="7">No Data Found</td>
+            <td align="center" colspan="9">No Data Found</td>
             </tr>
             ';
             }
