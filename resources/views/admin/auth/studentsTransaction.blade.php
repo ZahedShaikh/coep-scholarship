@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header" >{{ ucfirst(config('auth.prefix')) }}: There are <span id="total_records">{!! json_encode($data['total_data']) !!}</span> students have not updated their data for this semester</div>
+                <div class="card-header" >{{ ucfirst(config('auth.prefix')) }}: There are <span id="total_records">{!! json_encode($data['total_data']) !!}</span> transaction's for this student</div>
 
                 <br>
 
@@ -13,13 +13,11 @@
                     <table class="table table-hover" id='mytableID'>
                         <thead class="thead-light">
                             <tr>
-                                <th data-field="id">Form ID</th>
-                                <th data-field="name">Full Name</th>
-                                <th data-field="college">College</th>
-                                <th data-field="directSY">Direct-S year</th>
-                                <th data-field="yearOfAdmission">Year of Admission</th>
-                                <th data-field="contact">Contact</th>
-                                <th data-field="email">E-Mail</th>
+                                <th data-field="transactionId">Transaction ID</th>
+                                <th data-field="created_at">Date-time</th>
+                                <th data-field="amount">Amount</th>
+                                <th data-field="amountReceivedForYear">For Year</th>
+                                <th data-field="amountReceivedForSemester">For Semester</th>
                             </tr>
                         </thead>
                     </table>
