@@ -90,17 +90,17 @@ class accountantController extends Controller {
 
     // Sanction remaining all application 
     public function sanction(Request $request) {
-        try {
-            if ($request->ajax()) {
+        if ($request->ajax()) {
+            try {
                 $ids = $request->input('SanctionAlldataIds');
                 foreach ($ids as $studentID) {
                     $this->functionSaction($studentID);
                 }
+                echo json_encode(true);
+            } catch (\Exception $e) {
+                error_log('Error for sanction all', $e);
+                echo json_encode(false);
             }
-            echo json_encode(true);
-        } catch (\Exception $e) {
-            error . log('Error for sanction all', $e);
-            echo json_encode(false);
         }
     }
 
