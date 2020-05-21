@@ -52,7 +52,6 @@
 
                         <li class="nav-item dropdown">
 
-
                             @if(auth('admin')->user())
 
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

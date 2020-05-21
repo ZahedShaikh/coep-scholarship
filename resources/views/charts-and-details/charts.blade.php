@@ -1,4 +1,4 @@
-@extends('admin.layout.appToSearch')
+@extends('admin_common_layouts.appToSearch')
 @section('content')
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous">
